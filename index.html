@@ -616,8 +616,8 @@ body.nl-navigation.nl-page-open .header .gear{flex:0 0 auto;width:45px;height:45
 .nl-team-modal{display:none;position:fixed;inset:0;z-index:13000;background:rgba(0,0,0,.88);padding:calc(env(safe-area-inset-top,0px) + 10px) 8px calc(env(safe-area-inset-bottom,0px) + 10px);align-items:flex-start;justify-content:center;overflow-y:auto}
 .nl-team-modal.open{display:flex}
 .nl-team-card{--driver-accent:#ed1118;width:min(440px,100%);max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 20px);overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--driver-accent);border-radius:22px;background:linear-gradient(180deg,#121415,#090a0b 48%,#0d0f10);box-shadow:0 28px 80px #000b}
-.nl-team-hero{position:relative;height:clamp(250px,43dvh,360px);overflow:hidden;background:radial-gradient(ellipse at 50% 45%,color-mix(in srgb,var(--driver-accent) 20%,transparent),transparent 72%),#101215}
-.nl-team-car{position:absolute;inset:28px 10px 66px;width:calc(100% - 20px);height:calc(100% - 94px);object-fit:contain;filter:drop-shadow(0 12px 14px #000a)}
+.nl-team-hero{position:relative;height:clamp(250px,43dvh,360px);overflow:hidden;background:linear-gradient(180deg,#121415,#090a0b 95%)}
+.nl-team-car{position:absolute;inset:30px 6px 60px;width:calc(100% - 12px);height:calc(100% - 90px);object-fit:contain;filter:drop-shadow(0 16px 11px #000c) drop-shadow(0 2px 2px #0008)}
 .nl-team-close{position:sticky;float:right;top:10px;right:10px;z-index:10;margin:10px 10px -58px 0;width:46px;height:46px;border:1px solid #ffffff55;border-radius:50%;background:#090b0de8;color:white;font-size:29px;cursor:pointer;touch-action:manipulation}
 .nl-team-identity{position:absolute;bottom:15px;left:18px;right:18px;display:flex;align-items:center;gap:13px}
 .nl-team-logo{width:72px;height:56px;object-fit:contain;flex:none}
@@ -2129,8 +2129,8 @@ function nlOpenTeam(team){
  if(!modal||!card)return;
  card.style.setProperty('--driver-accent',config[1]);
  document.getElementById('nlTeamName').textContent=team.toUpperCase();
- const car=document.getElementById('nlTeamCar');car.src='assets/cars/'+config[0]+'.webp';car.alt='Render fotorealistico monoposto '+team;
- const logo=document.getElementById('nlTeamLogo');logo.src=nlTeamLogo(team);logo.alt='Logo '+team;
+ const car=document.getElementById('nlTeamCar');car.src='assets/cars/'+config[0]+'.png';car.alt='Render fotorealistico monoposto '+team;
+ const logo=document.getElementById('nlTeamLogo');logo.onerror=()=>{logo.onerror=null;logo.src=nlTeamLogo(team)};logo.src=nlOfficialLogo(team);logo.alt='Logo '+team;
  const pilots=(data.drivers||[]).filter(d=>d[1]===team).map(d=>d[0]);
  document.getElementById('nlTeamDrivers').textContent=pilots.join(' · ');
  const all=(data.raceHistory||[]).slice().sort((a,b)=>Number(a.round)-Number(b.round));
@@ -2147,6 +2147,7 @@ function nlOpenTeam(team){
  else {const max=Math.max(1,...races.map(r=>r.pts));chart.innerHTML='<div class="nl-team-chart">'+races.map(r=>'<div class="nl-team-bar-col" title="'+r.name.replace(/"/g,'')+' · '+r.pts+' punti"><span class="nl-team-bar-value">'+r.pts+'</span><div class="nl-team-bar" style="height:'+Math.max(2,Math.round(105*r.pts/max))+'px"></div><span>GP '+r.round+'</span></div>').join('')+'</div>'}
  modal.classList.add('open');modal.setAttribute('aria-hidden','false');
 }
+function nlOfficialLogo(team){const ids={"Mercedes": "mercedes", "Racing Bulls": "racingbulls", "Williams": "williams", "Aston Martin": "astonmartin", "Haas F1 Team": "haas", "Audi": "audi", "Ferrari": "ferrari", "Red Bull Racing": "redbull", "Alpine": "alpine", "McLaren": "mclaren", "Cadillac": "cadillac"};const id=ids[team];return id?'https://media.formula1.com/image/upload/common/f1/2026/'+id+'/2026'+id+'logo.svg':nlTeamLogo(team)}
 function nlTeamLogo(team){
  const map={'Mercedes':'mercedes','Racing Bulls':'racing-bulls','Williams':'williams','Aston Martin':'aston-martin','Haas F1 Team':'haas','Audi':'audi','Ferrari':'ferrari','Red Bull Racing':'redbull','Alpine':'alpine','McLaren':'mclaren','Cadillac':'cadillac'};
  return 'assets/teams/'+map[team]+'.svg';
