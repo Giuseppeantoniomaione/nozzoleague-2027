@@ -1,0 +1,8 @@
+NOZZOLEAGUE 2027 - NUOVO SITO
+1. Crea su GitHub un repository pubblico chiamato nozzoleague-2027.
+2. Carica tutti i file e la cartella assets estratti da questo ZIP nella radice del repository (non caricare lo ZIP).
+3. In Settings > Pages seleziona Deploy from a branch, branch main, cartella /(root), poi Save.
+4. Attendi il completamento della pubblicazione.
+5. Apri https://giuseppepantonioimaione.github.io/nozzoleague-2027/ (verifica il nome utente GitHub).
+6. Gli altri partecipanti devono aggiungere il NUOVO sito alla schermata Home.
+Il vecchio repository non va cancellato.

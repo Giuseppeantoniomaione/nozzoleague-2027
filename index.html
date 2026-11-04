@@ -1,0 +1,2131 @@
+<!doctype html>
+<html lang="it"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>F1 NozzoLeague 2027 — Circuiti reali</title>
+<style>
+:root{
+  --bg:#050606;--panel:#101213;--panel2:#171a1c;--line:#34383a;
+  --white:#f7f7f7;--muted:#a9adb0;--red:#ed1118;--green:#22b438;
+  --yellow:#ffd21f;--grey:#aeb3b6;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;color:var(--white);font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:
+    linear-gradient(135deg,rgba(225,6,0,.06),transparent 22%),
+    radial-gradient(circle at 80% 0,rgba(225,6,0,.08),transparent 30rem),
+    var(--bg);
+}
+.app{max-width:1580px;margin:auto;padding:14px 18px 10px}
+.header{
+  display:grid;grid-template-columns:1fr 480px 72px;gap:18px;align-items:center;
+  min-height:96px;border-bottom:1px solid rgba(237,17,24,.55);margin-bottom:14px;
+}
+.brand{display:flex;align-items:center}
+.brand-lockup{display:flex;align-items:center;gap:20px;min-width:0}
+.readable-brand{overflow:visible}
+.f1-readable{
+  color:#ed1118;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  font-size:68px;
+  font-weight:1000;
+  font-style:italic;
+  line-height:1;
+  letter-spacing:-5px;
+  min-width:92px;
+  text-align:left;
+  text-shadow:0 0 10px rgba(237,17,24,.12)
+}
+.brand-copy{
+  line-height:.9;
+  font-style:italic;
+  font-weight:1000;
+  letter-spacing:-1.5px
+}
+.brand-copy .name{
+  font-size:39px;
+  white-space:nowrap;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  color:#fff
+}
+.brand-copy .name span{color:var(--red)}
+.brand-copy .year{
+  font-size:27px;
+  margin-top:7px;
+  letter-spacing:-.5px;
+  font-family:Arial Black,Impact,Arial,sans-serif
+}
+.next{
+  justify-self:end;width:100%;border:1px solid var(--line);border-radius:12px;
+  background:linear-gradient(135deg,#111415,#090a0b);padding:12px 20px;
+  display:flex;align-items:center;min-height:74px;
+}
+.next small{display:block;color:var(--red);font-weight:900}.next strong{font-size:28px;display:block}.next b{color:var(--red)}
+.gear{
+  width:64px;height:64px;border:1px solid var(--red);border-radius:12px;
+  background:#0d0f10;color:white;font-size:30px;cursor:pointer
+}
+.main-grid{display:grid;grid-template-columns:1.22fr .85fr 1.04fr;gap:14px}
+.panel{
+  border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,#131617,#090b0c);
+  overflow:hidden;box-shadow:0 16px 35px rgba(0,0,0,.22)
+}
+.panel-title{
+  height:53px;display:flex;align-items:center;gap:12px;padding:0 18px;
+  font-size:20px;font-weight:950;border-bottom:1px solid #222628
+}
+.panel-title .icon{color:var(--red);font-size:23px}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 12px;border-bottom:1px solid #242729;text-align:left;white-space:nowrap}
+th{font-size:11px;text-transform:uppercase;background:#1a1d1f;color:#e8e8e8;position:sticky;top:0;z-index:1}
+tbody tr:hover td{background:#151819}
+.pos{width:48px;text-align:center;font-weight:900}
+.points{text-align:right;color:var(--red);font-weight:950}
+.team{
+  display:inline-flex;align-items:center;gap:8px
+}
+.team-logo{vertical-align:middle}
+.calendar .table-wrap{max-height:none;overflow:visible}
+.dot{display:inline-block;width:13px;height:13px;border-radius:50%;margin-right:9px;vertical-align:-1px}
+.done{color:#f2f2f2}.done .dot{background:var(--green)}
+.next-state{color:var(--yellow);font-weight:900}.next-state .dot{background:var(--yellow)}
+.wait .dot{background:var(--grey)}
+.last-race{grid-column:1/-1;margin-top:14px}
+.last-head{display:flex;align-items:center;gap:24px}
+.last-head .gp{color:var(--red)}
+.results-grid{display:grid;grid-template-columns:1fr 1fr}
+.results-grid table:first-child{border-right:1px solid #25292b}
+.footer{text-align:center;color:#666;letter-spacing:2px;font-size:13px;padding:15px 0 2px}
+
+/* Editor */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.84);z-index:20;padding:15px;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.editor{width:min(1180px,100%);max-height:94vh;overflow:auto;background:#101213;border:1px solid var(--line);border-radius:15px;padding:18px}
+.editor-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.editor h2{margin:0}.close,.save,.minor{border:0;border-radius:8px;padding:10px 14px;font-weight:900;cursor:pointer}
+.close,.minor{background:#303436;color:#fff}.save{background:var(--red);color:#fff}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tab{background:#282c2e;color:#fff;border:0;border-radius:8px;padding:10px 13px;font-weight:850;cursor:pointer}.tab.active{background:var(--red)}
+.edit-panel{display:none}.edit-panel.active{display:block}
+.edit-table{min-width:780px}.edit-table input,.edit-table select{
+  width:100%;background:#1a1d1f;color:#fff;border:1px solid #3b4042;border-radius:7px;padding:8px
+}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
+@media(max-width:1100px){
+  .header{grid-template-columns:1fr 330px 64px}
+  .brand-copy .name{font-size:34px}.main-grid{grid-template-columns:1fr 1fr}.calendar{grid-column:1/-1}
+}
+@media(max-width:760px){
+  .results-grid table:nth-child(2) thead{display:none}
+
+  .calendar .table-wrap{max-height:none;overflow:visible}
+
+  .f1-readable{font-size:44px;letter-spacing:-3px;min-width:62px}
+  .brand-copy .name{font-size:23px}
+  .brand-copy .year{font-size:18px}
+  .app{padding:10px}.header{grid-template-columns:1fr 56px}.next{grid-column:1/-1;grid-row:2}
+  .brand-copy .name{font-size:23px}.brand-copy .year{font-size:18px}
+  .main-grid{grid-template-columns:1fr}.calendar{grid-column:auto}.results-grid{grid-template-columns:1fr}
+  .results-grid table:first-child{border-right:0}.panel-title{font-size:16px}
+}
+
+.result-select{min-width:220px}
+.finish-note{margin:0 0 10px;color:var(--muted);font-size:12px}
+
+.presence-box{
+  margin-bottom:14px;padding:12px;border:1px solid #34383a;border-radius:10px;
+  background:#151819
+}
+.presence-title{font-size:13px;font-weight:950;text-transform:uppercase;margin-bottom:10px}
+.presence-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.presence-item{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #303436;
+  border-radius:8px;background:#1b1e20;font-size:13px
+}
+.presence-item input{width:auto;margin:0;accent-color:var(--red)}
+.presence-item small{display:block;color:var(--muted);font-size:10px}
+@media(max-width:760px){.presence-grid{grid-template-columns:1fr 1fr}}
+
+
+/* Home */
+.home-screen{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  background:#000;overflow:hidden;
+  transition:opacity .35s ease,visibility .35s ease;
+}
+.home-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.home-bg-blur{
+  position:absolute;inset:-30px;
+  background-image:linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.48)),url("assets/homepage-nozzoleague-2027-foto3-v5.png");
+  background-size:cover;background-position:center;
+  filter:blur(18px) brightness(.55);
+  transform:scale(1.08);
+}
+.home-poster{
+  position:absolute;inset:0;
+  background-image:url("assets/homepage-nozzoleague-2027-foto3-v5.png");
+  background-size:contain;background-repeat:no-repeat;background-position:center;
+}
+.home-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 48%,rgba(0,0,0,.15) 68%,rgba(0,0,0,.76) 100%);
+}
+.enter-league{
+  position:absolute;left:50%;bottom:34px;transform:translateX(-50%);
+  min-width:260px;padding:16px 28px;
+  border:1px solid rgba(255,255,255,.38);
+  border-radius:10px;
+  background:linear-gradient(135deg,#ef171d,#a90005);
+  color:#fff;font-size:18px;font-weight:950;letter-spacing:.7px;
+  cursor:pointer;box-shadow:0 12px 34px rgba(225,6,0,.42);
+  transition:transform .16s ease,filter .16s ease,box-shadow .16s ease;
+}
+.enter-league:hover{
+  transform:translateX(-50%) translateY(-2px);
+  filter:brightness(1.12);
+  box-shadow:0 15px 40px rgba(225,6,0,.58);
+}
+.enter-league:active{transform:translateX(-50%) scale(.98)}
+@media(max-width:760px){
+  .enter-league{bottom:24px;min-width:230px;padding:14px 20px;font-size:16px}
+}
+
+
+/* Storico GP */
+.calendar-history-row{cursor:pointer}
+.calendar-history-row:hover td{background:#1a1e20!important}
+.history-modal{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,.86);padding:16px;
+  align-items:center;justify-content:center
+}
+.history-modal.open{display:flex}
+.history-card{
+  width:min(720px,100%);max-height:90vh;overflow:auto;
+  background:#101213;border:1px solid #3a3e40;border-radius:14px;
+  box-shadow:0 24px 70px rgba(0,0,0,.55)
+}
+.history-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px;border-bottom:1px solid #2b2f31
+}
+.history-head h2{margin:0;font-size:22px}
+.history-close{
+  border:0;border-radius:8px;background:#303436;color:#fff;
+  padding:9px 13px;font-weight:900;cursor:pointer
+}
+.history-table{width:100%;border-collapse:collapse}
+.history-table th,.history-table td{padding:10px 14px;border-bottom:1px solid #25292b}
+.history-table th{font-size:11px;text-transform:uppercase;background:#1a1d1f}
+.history-table .podium-1 td{background:rgba(255,215,0,.09)}
+.history-table .podium-2 td{background:rgba(192,192,192,.08)}
+.history-table .podium-3 td{background:rgba(205,127,50,.09)}
+.history-note{
+  padding:12px 16px;color:#a9adb0;font-size:12px;
+  border-top:1px solid #25292b
+}
+
+
+/* Correzione popup storico */
+.history-modal{
+  display:none!important;
+  position:fixed!important;
+  inset:0!important;
+  z-index:10000!important;
+  background:rgba(0,0,0,.86)!important;
+  padding:18px!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.history-modal.open{display:flex!important}
+.history-card{
+  width:min(680px,100%)!important;
+  max-height:88vh!important;
+  overflow:auto!important;
+  background:#101213!important;
+  border:1px solid #3a3e40!important;
+  border-radius:14px!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.6)!important;
+}
+.history-head{
+  position:sticky!important;
+  top:0!important;
+  z-index:2!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding:16px 18px!important;
+  background:#101213!important;
+  border-bottom:1px solid #2b2f31!important;
+}
+.history-x{
+  width:38px;height:38px;border:0;border-radius:50%;
+  background:#25292b;color:#fff;font-size:25px;line-height:1;
+  cursor:pointer;
+}
+.history-x:hover{background:var(--red)}
+
+
+/* === MODULO PROFILI PILOTI UMANI — ISOLATO === */
+.human-driver-link{cursor:pointer;text-decoration:none}
+.human-driver-link:hover{text-decoration:underline}
+
+.driver-modal{
+  display:none;position:fixed;inset:0;z-index:12000;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(8px);
+  padding:8px;overflow-y:auto;align-items:flex-start;justify-content:center
+}
+.driver-modal.open{display:flex}
+
+.driver-card{
+  --driver-accent:#ed1118;
+  width:min(440px,100%);margin:auto;overflow:hidden;
+  border:1px solid var(--driver-accent);border-radius:22px;
+  background:
+    radial-gradient(circle at 15% 5%,rgba(255,255,255,.045),transparent 28rem),
+    linear-gradient(180deg,#121415 0%,#090a0b 48%,#0d0f10 100%);
+  box-shadow:0 28px 80px rgba(0,0,0,.68);
+  animation:driverCardIn .18s ease-out
+}
+@keyframes driverCardIn{
+  from{opacity:0;transform:translateY(12px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.driver-hero{
+  position:relative;height:465px;overflow:hidden;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.02) 0%,rgba(0,0,0,.03) 55%,rgba(0,0,0,.95) 100%),
+    var(--driver-photo) center var(--driver-photo-y,22%)/cover no-repeat
+}
+.driver-hero::before{
+  content:attr(data-number);position:absolute;left:10px;top:7px;
+  font-family:Arial Black,Impact,Arial,sans-serif;font-size:156px;line-height:.82;
+  font-style:italic;font-weight:1000;letter-spacing:-9px;
+  color:rgba(255,255,255,.10);pointer-events:none
+}
+.driver-hero::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(135deg,color-mix(in srgb,var(--driver-accent) 25%,transparent),transparent 34%),
+    linear-gradient(180deg,transparent 52%,rgba(0,0,0,.12) 67%,rgba(0,0,0,.95) 100%);
+  pointer-events:none
+}
+.driver-close{
+  position:absolute;top:14px;right:14px;z-index:5;width:40px;height:40px;
+  border:1px solid rgba(255,255,255,.18);border-radius:50%;
+  background:rgba(5,6,6,.62);color:#fff;font-size:28px;line-height:1;cursor:pointer
+}
+.driver-close:hover{background:var(--driver-accent)}
+
+.driver-team-badge{
+  position:absolute;top:66px;right:17px;z-index:4;
+  width:105px;text-align:center
+}
+.driver-team-logo{
+  display:block;max-width:94px;max-height:72px;width:auto;height:auto;
+  margin:0 auto 8px;object-fit:contain;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.65))
+}
+.driver-team-name{
+  color:#fff;font-size:9.5px;line-height:1.25;font-weight:900;
+  letter-spacing:1.25px;text-shadow:0 2px 8px #000
+}
+
+.driver-name-block{
+  position:absolute;z-index:4;left:20px;right:20px;bottom:18px
+}
+.driver-name-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.driver-name{
+  margin:0;font-family:Arial Black,Impact,Arial,sans-serif;font-size:46px;
+  line-height:.92;font-style:italic;font-weight:1000;letter-spacing:-1.5px
+}
+.driver-number{
+  flex:none;padding:0 0 2px 13px;border-left:2px solid var(--driver-accent);
+  color:#fff;font-size:43px;line-height:.92;font-weight:1000;font-style:italic
+}
+.driver-sub{
+  margin-top:8px;color:var(--driver-accent);font-size:12px;line-height:1.25;
+  font-weight:950;letter-spacing:1.3px;text-transform:uppercase
+}
+
+.driver-stats{
+  margin:12px;border:1px solid #2e3234;border-radius:15px;overflow:hidden;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  background:linear-gradient(180deg,#151819,#0d0f10)
+}
+.driver-stat{
+  min-height:84px;padding:13px 8px;text-align:center;border-bottom:1px solid #272b2d
+}
+.driver-stat:nth-child(odd){border-right:1px solid #272b2d}
+.driver-stat:nth-last-child(-n+2){border-bottom:0}
+.driver-stat small{
+  display:block;min-height:24px;color:#b9bdc0;font-size:9.5px;font-weight:900;
+  line-height:1.15;text-transform:uppercase;letter-spacing:.35px
+}
+.driver-stat strong{
+  display:block;margin-top:4px;color:#fff;font-size:27px;line-height:1;font-weight:1000
+}
+.driver-stat strong.accent{color:var(--driver-accent)}
+
+.driver-recent{
+  margin:12px;border:1px solid #2e3234;border-radius:15px;overflow:hidden;
+  background:linear-gradient(180deg,#151819,#0d0f10)
+}
+.driver-recent-title{
+  padding:13px 14px;border-bottom:1px solid #292d2f;font-size:13px;
+  font-weight:950;letter-spacing:.7px;text-transform:uppercase
+}
+.driver-race-row{
+  display:grid;grid-template-columns:minmax(0,1fr) 54px 74px;gap:8px;
+  align-items:center;padding:11px 13px;border-bottom:1px solid #25292b
+}
+.driver-race-row:last-child{border-bottom:0}
+.driver-race-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:900}
+.driver-race-pos{text-align:center;font-size:22px;font-weight:1000}
+.driver-race-pos.win{color:#ffe000}
+.driver-race-pts{text-align:right;color:var(--driver-accent);font-size:12px;font-weight:950}
+.driver-empty{padding:19px 14px;color:var(--muted);text-align:center;font-size:12px}
+
+@media(max-width:390px){
+  .driver-modal{padding:4px}
+  .driver-card{border-radius:18px}
+  .driver-hero{height:430px}
+  .driver-name{font-size:40px}
+  .driver-number{font-size:38px}
+  .driver-team-badge{right:12px}
+}
+@media(min-width:761px){.driver-card{width:min(510px,100%)}}
+
+
+/* NozzoLeague 2027: navigazione separata; il motore gara resta invariato */
+.nl-menu{padding:24px 0 34px;min-height:55vh;display:flex;flex-direction:column;justify-content:center}
+.nl-menu-heading{text-align:center;font:italic 900 clamp(26px,5vw,55px) Arial,sans-serif;letter-spacing:-1px;margin:0 0 34px}.nl-menu-heading em{color:#ed1118}
+.nl-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:820px;width:100%;margin:0 auto}
+.nl-menu-grid button{min-height:158px;border:1px solid #d51a22;border-radius:15px;background:linear-gradient(155deg,#1c1e20,#08090a 70%);color:white;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 10px 28px #0008, inset 0 -2px 0 #9b1217;transition:transform .15s,box-shadow .15s}
+.nl-menu-grid button span{display:block;font-size:36px;margin-bottom:12px}.nl-menu-grid button:hover{transform:translateY(-3px);box-shadow:0 12px 35px #9b121744}
+.nl-back{margin:12px 0 18px}.nl-back[hidden]{display:none}.nl-back button{background:#17191b;color:#fff;border:1px solid #ed1118;border-radius:9px;padding:11px 17px;font-weight:900;cursor:pointer}
+body.nl-navigation main{display:none}body.nl-navigation.nl-page-open main{display:block}
+body.nl-navigation #nlGrid{display:block}body.nl-navigation #nlGrid>article{display:none}body.nl-navigation #nlGrid>article.nl-active{display:block}
+body.nl-navigation .last-race{display:none}body.nl-navigation .last-race.nl-active{display:block}
+body.nl-navigation.nl-page-open #nlMenu{display:none}
+@media(max-width:600px){.nl-menu-grid{gap:12px}.nl-menu-grid button{min-height:135px;font-size:13px;padding:12px 5px}.nl-menu-grid button span{font-size:29px}.nl-menu{min-height:60vh;padding:20px 0}.nl-menu-heading{margin-bottom:24px}}
+
+/* NozzoLeague 2027 — mobile-first visual refresh (menu only) */
+body.nl-navigation:not(.nl-page-open) .app{background:transparent}
+body.nl-navigation:not(.nl-page-open){background:#050507!important}
+body.nl-navigation:not(.nl-page-open)::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 92% 13%,rgba(226,0,26,.23),transparent 42%),linear-gradient(155deg,transparent 28%,rgba(209,12,30,.07) 29%,transparent 31%),repeating-linear-gradient(135deg,transparent 0 48px,rgba(255,255,255,.012) 49px 50px)}
+.nl-menu{position:relative;isolation:isolate;display:block;min-height:0;padding:12px 0 36px;max-width:1020px;margin:0 auto}
+.nl-menu-heading{display:none}
+.nl-hero{position:relative;overflow:hidden;min-height:240px;border:1px solid #3b151a;border-radius:17px;background:radial-gradient(ellipse at 80% 48%,rgba(230,0,26,.34),transparent 52%),linear-gradient(125deg,#14171b 0%,#08090c 58%,#17080c 100%);box-shadow:0 24px 50px #0009,inset 0 1px 0 #ffffff1b}
+.nl-hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(140deg,transparent 0 16px,#ffffff07 17px 18px,transparent 19px 39px);mask-image:linear-gradient(90deg,transparent,#000);pointer-events:none}
+.nl-hero::after{content:"";position:absolute;width:130%;height:3px;top:56%;left:-10%;transform:rotate(-17deg);background:linear-gradient(90deg,transparent,#d70820,#ff4659,transparent);box-shadow:0 0 20px #ff1429;opacity:.9;pointer-events:none}
+.nl-hero-top,.nl-hero-bottom{position:relative;z-index:2;display:flex;justify-content:space-between;gap:8px;padding:18px 20px;font-size:9px;font-weight:900;letter-spacing:1.7px;color:#b6b7bf}
+.nl-kicker i{display:inline-block;width:14px;height:2px;background:#f01732;vertical-align:middle;margin:0 4px}
+.nl-live{color:#ff3851}
+.nl-hero-flag{position:absolute;right:-15px;top:28px;font:italic 1000 clamp(140px,30vw,290px)/1 Arial,sans-serif;letter-spacing:-24px;color:#ffffff09;transform:skew(-8deg);user-select:none}
+.nl-hero-copy{position:relative;z-index:2;padding:16px 20px 22px}
+.nl-hero-eyebrow{font-size:10px;font-weight:800;letter-spacing:3px;color:#fa4055}
+.nl-hero h1{font:italic 1000 clamp(30px,7.5vw,70px)/.98 Arial,sans-serif;letter-spacing:-2px;margin:14px 0 9px;text-shadow:0 4px 18px #000}
+.nl-hero h1 span{color:#fff}.nl-hero h1 strong{display:block;color:#f01732;font-size:1.38em;letter-spacing:-3px}
+.nl-hero-copy p{font-size:10px;font-weight:800;letter-spacing:2px;color:#c8c9cc;margin:12px 0 0}
+.nl-hero-bottom{border-top:1px solid #ffffff15;padding:12px 20px;background:#0003}
+.nl-section-heading{display:flex;justify-content:space-between;align-items:end;gap:8px;margin:28px 0 14px;border-left:4px solid #f01732;padding-left:12px}
+.nl-section-heading span{font-size:17px;font-weight:1000;font-style:italic;letter-spacing:.4px}.nl-section-heading small{font-size:9px;color:#888b91;letter-spacing:1px;font-weight:800}
+.nl-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:none}
+.nl-menu-grid .nl-tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;overflow:hidden;min-height:178px;padding:17px 15px 14px;border-radius:13px;border:1px solid #44404a;background:linear-gradient(150deg,#24242a 0%,#101115 53%,#09090c 100%);box-shadow:0 14px 24px #0009,inset 0 1px 0 #ffffff1b;color:#fff;transition:transform .2s,border-color .2s,box-shadow .2s}
+.nl-menu-grid .nl-tile::before{content:"";position:absolute;top:0;left:0;width:65%;height:3px;background:linear-gradient(90deg,#ff1d37,transparent)}
+.nl-menu-grid .nl-tile::after{content:"";position:absolute;right:-30px;bottom:-42px;width:115px;height:115px;border:1px solid #ff233019;border-radius:50%;box-shadow:0 0 0 22px #ff233008,0 0 0 46px #ff233005;pointer-events:none}
+.nl-menu-grid .nl-tile:hover,.nl-menu-grid .nl-tile:focus-visible{transform:translateY(-3px);border-color:#ef1c36;box-shadow:0 15px 35px #ee1a2926}
+.nl-tile-index{font-size:9px!important;letter-spacing:1.5px;color:#a0a0a8;font-weight:900}
+.nl-menu-grid .nl-tile .nl-tile-icon{font-size:43px;line-height:1.1;margin:16px 0 12px;color:#f72a43;text-shadow:0 0 20px #e91b3d55}
+.nl-menu-grid .nl-tile .nl-tile-label{font-size:clamp(13px,3.5vw,18px);font-style:italic;font-weight:1000;line-height:1.14;letter-spacing:.2px;margin:0}
+.nl-tile-arrow{position:absolute;right:14px;bottom:12px;font-size:23px;color:#ff334b}
+.nl-menu-footer{display:flex;justify-content:space-between;gap:8px;margin-top:23px;color:#666a72;font-size:9px;font-weight:800;letter-spacing:1.3px}
+.nl-back button{background:linear-gradient(115deg,#260b12,#101115);border:1px solid #f01732;border-radius:10px;box-shadow:0 5px 20px #0009}
+@media(min-width:700px){.nl-menu{padding-top:26px}.nl-hero{min-height:330px}.nl-hero-copy{padding:25px 40px 35px}.nl-hero-top,.nl-hero-bottom{padding-left:40px;padding-right:40px}.nl-menu-grid .nl-tile{min-height:205px;padding:23px}.nl-menu-grid .nl-tile .nl-tile-icon{font-size:53px}}
+@media(max-width:600px){.nl-menu{padding:8px 0 30px}.nl-hero{min-height:245px}.nl-menu-grid{gap:11px}.nl-menu-grid .nl-tile{min-height:178px;padding:15px 12px}.nl-menu-grid .nl-tile .nl-tile-icon{font-size:39px;margin:15px 0 13px}.nl-section-heading span{font-size:15px}.nl-section-heading small{font-size:8px}}
+@media(max-width:355px){.nl-menu-grid .nl-tile{min-height:166px}.nl-hero h1{font-size:29px}.nl-section-heading small{display:none}}
+
+/* NOZZOLEAGUE 2027 — tunnel theme, excluding the original opening home. */
+body{background:#050506!important;background-image:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.68)),url("assets/tunnel-2027-hd.webp")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important}
+body.nl-navigation:not(.nl-page-open)::before{background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.34))!important}
+.nl-menu{background:transparent!important}
+.nl-hero{background:linear-gradient(140deg,rgba(8,8,12,.85),rgba(21,3,8,.45))!important;box-shadow:0 14px 42px #0009,0 0 20px #e3002422}
+.nl-menu-grid .nl-tile{background:linear-gradient(155deg,rgba(22,15,20,.91),rgba(3,3,5,.90))!important;border:1px solid #fa243b!important;box-shadow:inset 0 0 17px #e21b2522,0 0 16px #df08252e!important;backdrop-filter:blur(9px);align-items:center!important;text-align:center!important}
+.nl-menu-grid .nl-tile .nl-tile-icon{color:#fff!important;text-shadow:0 0 13px #ff253e66!important}
+.nl-menu-grid .nl-tile .nl-tile-label{color:#fff}
+.nl-menu-grid .nl-tile::before{width:75%;left:12.5%;top:auto;bottom:10px;height:3px;background:linear-gradient(90deg,transparent,#ff1635,transparent)}
+.nl-menu-grid .nl-tile::after{display:none}
+.panel,.editor,.modal-content{background-color:rgba(8,9,12,.90)!important;backdrop-filter:blur(8px)}
+@media(max-width:760px){body{background-attachment:fixed!important;background-size:cover!important}body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#0005,#0008),url("assets/tunnel-2027-hd.webp") center/cover no-repeat}}
+/* The opening home remains its own full-screen design. */
+.home-screen{background:#000!important}
+
+/* NozzoLeague 2027: calendario mobile-first */
+#calendarTable{width:100%;table-layout:fixed}#calendarTable th:first-child,#calendarTable td:first-child{width:43px}#calendarTable th:last-child,#calendarTable td:last-child{width:88px;font-size:10px}#calendarTable td{padding:13px 5px;vertical-align:middle}.nc-clickable{cursor:pointer;touch-action:manipulation}.nc-clickable:active{background:#58151b}.nc-gp{font-weight:850;font-size:13px;color:#fff}.nc-track{font-size:11px;color:#babdc5;margin-top:4px;line-height:1.35}.nc-sprint{display:inline-block;margin-top:6px;padding:3px 7px;background:#b61726;color:white;border-radius:4px;font-weight:900;font-size:9px;letter-spacing:.08em}.nc-modal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.83);align-items:center;justify-content:center;padding:16px}.nc-modal.open{display:flex}.nc-card{position:relative;overflow:auto;max-height:90dvh;width:min(100%,510px);background:linear-gradient(150deg,#24252b,#0a0b0f 70%);border:1px solid #b81b2b;border-radius:16px;padding:24px 18px;color:#fff;box-shadow:0 12px 60px #000}.nc-card h2{font-size:21px;line-height:1.15;margin:0 32px 18px 0}.nc-close{position:absolute;right:15px;top:10px;border:0;background:transparent;color:white;font-size:31px;cursor:pointer}.nc-circuit-name{font-size:19px;font-weight:850;color:#fff}.nc-location{color:#b7b8c0;margin:9px 0 15px;font-size:13px}.nc-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.nc-stat{padding:15px 12px;border:1px solid #393943;border-left:3px solid #d32032;background:#14151b;border-radius:8px}.nc-stat small{display:block;color:#a7a7b0;margin-bottom:8px}.nc-stat b{font-size:18px}.nc-note{font-size:11px;line-height:1.5;color:#a5a6ae;margin-top:18px}.nc-results{margin-top:12px;background:#b91c2c;border:0;border-radius:8px;padding:13px 15px;color:#fff;font-weight:850;width:100%}@media(max-width:410px){#calendarTable th:last-child,#calendarTable td:last-child{width:77px;font-size:9px}.nc-gp{font-size:12px}.nc-track{font-size:10px}}
+
+/* Sprint 2027: pannello amministratore e schede tracciato */
+.nz-sprint-panel{margin:16px 0;padding:14px;background:#101217;border:1px solid #8d2631;border-radius:12px;color:#fff}
+.nz-sprint-panel h3{margin:0 0 8px;color:#ff4a59;font-size:18px}
+.nz-sprint-panel .nz-sub{font-size:12px;color:#bfc0c6;margin-bottom:12px}
+.nz-sprint-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.nz-sprint-actions button{padding:11px 13px;border-radius:8px;background:#b51b2b;border:0;color:#fff;font-weight:800;cursor:pointer}
+.nz-sprint-actions button:disabled{opacity:.4;cursor:not-allowed}
+.nz-sprint-table{width:100%;border-collapse:collapse;font-size:12px}
+.nz-sprint-table td,.nz-sprint-table th{padding:8px 4px;border-bottom:1px solid #303139;text-align:left}
+.nz-sprint-table select{width:100%;max-width:220px;min-width:0;background:#1c2028;color:#fff;border:1px solid #4b4d54;border-radius:5px;padding:7px 4px}
+.nz-sprint-status{color:#ddd;font-size:12px;margin:8px 0}
+.nz-track-art{display:flex;align-items:center;justify-content:center;min-height:150px;margin:14px 0;border-radius:12px;background:radial-gradient(ellipse at center,#25141b 0%,#101116 75%);border:1px solid #4d2630}
+.nz-track-art svg{width:min(100%,290px);height:160px;overflow:visible}
+.nz-track-art path{fill:none;stroke:#f0f0f2;stroke-width:7;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 5px #f12a46)}
+.nz-track-caption{font-size:10px;color:#a7a7ad;text-align:center;margin-top:-7px}
+@media(max-width:450px){.nz-sprint-panel{padding:10px}.nz-sprint-table select{font-size:12px}}
+.nz-upload-art img{display:block;width:100%;height:auto;max-height:260px;object-fit:contain;margin:auto;filter:drop-shadow(0 0 7px rgba(255,255,255,.16))}.nz-upload-art{padding:12px 6px;min-height:130px;display:flex;align-items:center;justify-content:center}
+/* Record qualifiche - compatto, smartphone verticale */
+.nz-qual-card{margin:12px 0;padding:13px 14px;border:1px solid #414548;border-left:3px solid #ed1118;border-radius:10px;background:rgba(10,12,14,.94);text-align:left;max-width:100%;overflow:hidden}.nz-qual-label{font-size:10px;font-weight:800;letter-spacing:.6px;color:#aeb3b8}.nz-qual-time{font-size:clamp(27px,8vw,39px);font-weight:950;font-style:italic;line-height:1.25;color:#fff;font-variant-numeric:tabular-nums}.nz-qual-driver{font-size:14px;font-weight:850;color:#fff}.nz-qual-team{font-size:12px;color:#aeb3b8;margin-top:2px}
+
+/* Menu 2027 approvato: nero/rosso, 2x2, safe-area iPhone */
+body.nl-navigation:not(.nl-page-open){background:#050506!important;background-image:none!important}
+body.nl-navigation:not(.nl-page-open)::before,body.nl-navigation:not(.nl-page-open)::after{display:none!important}
+body.nl-navigation:not(.nl-page-open) .app{padding-top:0!important}
+body.nl-navigation:not(.nl-page-open) .header{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:16px;width:52px;min-height:0;height:46px;margin:0;padding:0;display:block;border:0;z-index:8;pointer-events:none}
+body.nl-navigation:not(.nl-page-open) .header .brand,body.nl-navigation:not(.nl-page-open) .header .next{display:none!important}
+body.nl-navigation:not(.nl-page-open) .header .gear{pointer-events:auto;display:block;width:44px;height:44px;border:1px solid #e81b32;border-radius:12px;background:rgba(9,9,12,.94);box-shadow:0 0 12px #ef172b55;color:#fff;font-size:24px}
+body.nl-navigation:not(.nl-page-open) .nl-menu{padding:calc(env(safe-area-inset-top,0px) + 74px) 8px 34px!important;max-width:680px;margin:0 auto;min-height:100dvh}
+.nl-brand2027{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;margin:0 auto 33px;padding:0 10px}
+.nl-f1mark{display:block;width:clamp(90px,24vw,144px);height:auto;margin:0 auto 12px;filter:drop-shadow(0 0 8px #f20d2530)}
+.nl-brand-name{font-family:Arial Black,Impact,Arial,sans-serif;font-size:clamp(27px,8.3vw,56px);font-weight:1000;font-style:italic;letter-spacing:-1.8px;line-height:1;color:#fff;white-space:nowrap;text-shadow:0 3px 12px #000}
+.nl-brand-year{width:min(88%,390px);display:flex;align-items:center;gap:14px;margin:5px auto 0;color:#f1122c;font:italic 1000 clamp(31px,9vw,58px)/1 Arial Black,Impact,Arial,sans-serif}
+.nl-brand-year:before,.nl-brand-year:after{content:"";height:2px;flex:1;background:linear-gradient(90deg,transparent,#f11a31);box-shadow:0 0 9px #ff173a}
+.nl-brand-year:after{transform:scaleX(-1)}
+.nl-section-heading{margin:0 0 24px!important;padding:0!important;border:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center}
+.nl-section-heading span{font:italic 950 clamp(18px,5.1vw,31px)/1.15 Arial Black,Impact,Arial,sans-serif!important;letter-spacing:-.6px;white-space:nowrap}
+.nl-section-heading:before,.nl-section-heading:after{content:"///";font:900 23px Arial,sans-serif;color:#f1122c;letter-spacing:-3px;margin:0 12px}
+.nl-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.nl-menu-grid .nl-tile{min-width:0;min-height:170px!important;padding:14px 6px 16px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:0!important;border:2px solid #ee142c!important;border-radius:17px!important;background:linear-gradient(145deg,#200407,#08080a 63%)!important;box-shadow:0 0 13px #f018343a,inset 0 0 18px #f0183419!important;position:relative}
+.nl-menu-grid .nl-tile::before{display:none!important}
+.nl-menu-grid .nl-tile::after{display:block!important;content:"";position:absolute;right:0;bottom:0;width:38%;height:32%;border:0;border-radius:0;background:repeating-linear-gradient(135deg,transparent 0 11px,#e80b251f 12px 17px,transparent 18px 23px)!important;clip-path:polygon(100% 0,100% 100%,0 100%);box-shadow:none!important;pointer-events:none}
+.nl-menu-grid .nl-tile .nl-tile-icon{display:block!important;font-size:37px!important;line-height:1.1!important;color:#fa1b35!important;margin:0 0 11px!important;filter:drop-shadow(0 0 6px #e9163244)}
+.nl-menu-grid .nl-tile .nl-tile-label{font:900 clamp(12px,3.4vw,19px)/1.16 Arial,Segoe UI,sans-serif!important;letter-spacing:0!important;color:#fff!important;position:relative;z-index:1}
+.nl-menu-grid .nl-tile .nl-tile-arrow{position:relative!important;right:auto!important;bottom:auto!important;display:block;margin:9px 0 0;font-size:27px;line-height:1;color:#f21631;z-index:1}
+.nl-menu-footer{margin-top:26px}
+@media(max-width:390px){.nl-brand-name{font-size:7.8vw}.nl-menu-grid .nl-tile{min-height:155px!important}.nl-menu-grid .nl-tile .nl-tile-icon{font-size:33px!important}.nl-section-heading:before,.nl-section-heading:after{margin:0 7px}}
+@media(min-width:700px){body.nl-navigation:not(.nl-page-open) .nl-menu{padding-top:calc(env(safe-area-inset-top,0px) + 82px)!important}.nl-menu-grid .nl-tile{min-height:205px!important}}
+
+/* Menu definitivo approvato: tipografia, icone e logo F1® */
+.nl-f1mark{width:clamp(125px,33vw,210px)!important;max-height:65px!important;object-fit:contain!important;margin-bottom:10px!important}
+.nl-brand-name{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-weight:900!important;font-style:italic!important;letter-spacing:-.4px!important;transform:skew(-7deg) scaleX(1.04);font-size:clamp(30px,8.5vw,60px)!important}
+.nl-brand-year{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-weight:900!important;letter-spacing:2px!important}
+.nl-section-heading span{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-weight:900!important;letter-spacing:.3px!important}
+.nl-menu-grid .nl-tile .nl-tile-icon{width:clamp(61px,19vw,94px)!important;height:clamp(61px,19vw,94px)!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 10px!important;filter:none!important}
+.nl-menu-grid .nl-tile .nl-tile-icon img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 5px #ed183355)}
+.nl-menu-grid .nl-tile .nl-tile-arrow{display:none!important}
+.nl-menu-grid .nl-tile .nl-tile-label{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;font-weight:900!important;font-size:clamp(15px,4vw,24px)!important;line-height:1.08!important;letter-spacing:0!important;transform:skew(-5deg);white-space:normal;overflow-wrap:normal}
+.nl-menu-grid .nl-tile{min-height:clamp(172px,45vw,230px)!important;padding:14px 5px!important}
+body.nl-navigation:not(.nl-page-open) .nl-menu{padding-top:calc(env(safe-area-inset-top,0px) + 84px)!important}
+@media(max-width:390px){.nl-menu-grid .nl-tile .nl-tile-label{font-size:clamp(14px,3.9vw,17px)!important}.nl-menu-grid .nl-tile{min-height:168px!important}.nl-menu-grid{gap:10px!important}.nl-brand-name{font-size:8vw!important}}
+
+/* Banner prossimo GP: esclusivamente nel menu principale */
+.nl-next-banner{width:100%;margin:20px 0 0;min-height:143px;display:grid;grid-template-columns:minmax(0,1fr) 33% 40px;gap:8px;align-items:center;position:relative;overflow:hidden;text-align:left;padding:16px 12px 16px 17px;background:linear-gradient(125deg,#15151a 0%,#08090c 65%,#21070d 100%);border:2px solid #f6f6f8;border-radius:17px;box-shadow:0 0 15px #ffffff24,inset 0 0 18px #ffffff0c;color:#fff;cursor:pointer}
+.nl-next-banner::after{content:"";position:absolute;bottom:0;right:13%;width:28%;height:40%;background:repeating-linear-gradient(135deg,transparent 0 12px,#ee14321c 13px 19px,transparent 20px 28px);pointer-events:none}
+.nl-next-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;min-width:0;gap:3px}
+.nl-next-tag{font:italic 900 clamp(13px,3.5vw,19px)/1.1 'Arial Black',Arial,sans-serif;background:#f8f8fa;color:#09090b;padding:5px 9px;transform:skew(-8deg);margin-bottom:9px;white-space:nowrap}
+.nl-next-tag i{color:#ec1734;font-style:normal}
+.nl-next-copy strong{font:italic 900 clamp(20px,5.5vw,32px)/1.05 'Arial Black',Arial,sans-serif;overflow-wrap:anywhere}
+.nl-next-copy em{font:italic 900 clamp(14px,4vw,22px)/1.05 'Arial Black',Arial,sans-serif;color:#fa1936}
+.nl-next-copy small{font:italic 600 clamp(9px,2.5vw,13px)/1.2 Arial,sans-serif;color:#bcbcc3;max-width:100%}
+.nl-next-track{z-index:1;min-width:0;display:flex;align-items:center;justify-content:center;border-left:1px solid #6d6d73;padding-left:7px;min-height:92px}
+.nl-next-track img{width:100%;height:110px;object-fit:contain;filter:grayscale(1) brightness(0) invert(1);opacity:.95}
+.nl-next-go{z-index:1;background:#fff;color:#09090b;border-radius:10px;width:33px;height:48px;display:flex;align-items:center;justify-content:center;font:900 39px/1 Arial,sans-serif}
+.nl-next-banner:hover,.nl-next-banner:focus-visible{box-shadow:0 0 21px #ffffff55,inset 0 0 18px #ffffff15}
+body.nl-page-open .nl-next-banner{display:none!important}
+@media(max-width:390px){.nl-next-banner{grid-template-columns:minmax(0,1fr) 30% 29px;gap:5px;padding:12px 8px 12px 11px;min-height:128px}.nl-next-go{width:28px;height:42px}.nl-next-tag{font-size:12px}.nl-next-copy strong{font-size:19px}.nl-next-track img{height:90px}}
+
+/* Intestazione sezioni interne 2027 — identità coerente e spazio Dynamic Island */
+body.nl-navigation.nl-page-open .app{padding-top:calc(env(safe-area-inset-top, 0px) + 22px)!important}
+body.nl-navigation.nl-page-open .header{display:flex!important;align-items:center;justify-content:space-between;gap:12px;min-height:76px;margin-bottom:16px;padding:0 0 13px;border-bottom:1px solid #e51b32a8}
+body.nl-navigation.nl-page-open .header .brand{min-width:0;flex:1}
+body.nl-navigation.nl-page-open .header .brand-lockup{display:flex;align-items:center;gap:13px;min-width:0}
+.nl-inner-f1{display:block;width:clamp(65px,15vw,110px);height:52px;object-fit:contain;flex-shrink:0}
+.nl-inner-wordmark{min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.nl-inner-name{color:#fff;font:italic 1000 clamp(18px,3.1vw,33px)/1 'Arial Black',Arial,sans-serif;letter-spacing:-.8px;transform:skew(-7deg);white-space:nowrap}
+.nl-inner-year{color:#f01833;font:italic 1000 clamp(19px,3vw,29px)/1 'Arial Black',Arial,sans-serif;transform:skew(-7deg)}
+body.nl-navigation.nl-page-open .header .gear{flex:0 0 auto;width:45px;height:45px;font-size:24px}
+@media(max-width:600px){
+ body.nl-navigation.nl-page-open .app{padding-top:calc(env(safe-area-inset-top, 0px) + 22px)!important}
+ body.nl-navigation.nl-page-open .header{min-height:64px;gap:8px;margin-bottom:12px;padding-bottom:10px}
+ body.nl-navigation.nl-page-open .header .brand-lockup{gap:9px}
+ .nl-inner-f1{width:clamp(56px,16vw,74px);height:40px}
+ .nl-inner-name{font-size:clamp(15px,4.2vw,21px);letter-spacing:-.7px}
+ .nl-inner-year{font-size:clamp(17px,4.8vw,23px)}
+ body.nl-navigation.nl-page-open .header .gear{width:38px;height:38px;font-size:21px}
+}
+@media(max-width:355px){.nl-inner-f1{width:50px}.nl-inner-name{font-size:14px}.nl-inner-year{font-size:17px}}
+
+/* Homepage: scorre interamente oltre il bordo sinistro, senza dissolvenza. */
+#homeScreen{transition:transform 300ms cubic-bezier(.22,.61,.36,1)!important;will-change:transform;transform:translate3d(0,0,0);opacity:1!important;visibility:visible!important;backface-visibility:hidden;}
+#homeScreen.hidden{transform:translate3d(-101%,0,0)!important;opacity:1!important;visibility:visible!important;pointer-events:none!important;}
+@media(prefers-reduced-motion:reduce){#homeScreen{transition:none!important}}
+/* Navigazione a due schermate simultanee: movimento completo oltre i bordi. */
+.app.nl-slide-in-left,.app.nl-slide-in-right{will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.app.nl-slide-in-left{animation:nlEnterLeft 430ms cubic-bezier(.35,0,.2,1) both!important;pointer-events:none}
+.app.nl-slide-in-right{animation:nlEnterRight 430ms cubic-bezier(.35,0,.2,1) both!important;pointer-events:none}
+.nl-transition-old{position:fixed!important;left:0!important;right:0!important;z-index:9000!important;pointer-events:none!important;will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden;contain:layout style paint}
+.nl-transition-old.nl-old-left{animation:nlExitLeft 430ms cubic-bezier(.35,0,.2,1) both!important}
+.nl-transition-old.nl-old-right{animation:nlExitRight 430ms cubic-bezier(.35,0,.2,1) both!important}
+@keyframes nlExitLeft{from{transform:translate3d(0,0,0)}to{transform:translate3d(calc(-1 * var(--nl-travel-left, 110vw)),0,0)}}
+@keyframes nlExitRight{from{transform:translate3d(0,0,0)}to{transform:translate3d(var(--nl-travel-right, 110vw),0,0)}}
+@keyframes nlEnterLeft{from{transform:translate3d(calc(-1 * var(--nl-travel-left, 110vw)),0,0)}to{transform:translate3d(0,0,0)}}
+@keyframes nlEnterRight{from{transform:translate3d(var(--nl-travel-right, 110vw),0,0)}to{transform:translate3d(0,0,0)}}
+/* La copia uscente mantiene la sua impaginazione anche dopo il cambio pagina. */
+.nl-transition-old.nl-clone-menu #nlMenu{display:block!important}
+.nl-transition-old.nl-clone-menu main{display:none!important}
+.nl-transition-old.nl-clone-menu .header{position:absolute!important;top:calc(env(safe-area-inset-top,0px) + 12px)!important;right:16px!important;width:52px!important;min-height:0!important;height:46px!important;margin:0!important;padding:0!important;display:block!important;border:0!important;z-index:8!important}
+.nl-transition-old.nl-clone-menu .header .brand,.nl-transition-old.nl-clone-menu .header .next{display:none!important}
+.nl-transition-old.nl-clone-menu .header .gear{display:block!important;width:44px!important;height:44px!important}
+.nl-transition-old.nl-clone-menu .nl-menu{padding:calc(env(safe-area-inset-top,0px) + 84px) 8px 34px!important;max-width:680px!important;margin:0 auto!important;min-height:100dvh!important}
+.nl-transition-old.nl-clone-page #nlMenu{display:none!important}
+.nl-transition-old.nl-clone-page main{display:block!important}
+.nl-transition-old.nl-clone-page #nlGrid{display:block!important}
+.nl-transition-old.nl-clone-page #nlGrid>article{display:none!important}
+.nl-transition-old.nl-clone-page #nlGrid>article.nl-active{display:block!important}
+.nl-transition-old.nl-clone-page .last-race{display:none!important}
+.nl-transition-old.nl-clone-page .last-race.nl-active{display:block!important}
+.nl-transition-old.nl-clone-page{padding-top:calc(env(safe-area-inset-top,0px) + 22px)!important}
+.nl-transition-old.nl-clone-page .header{display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:64px!important;margin-bottom:12px!important;padding-bottom:10px!important}
+@media(prefers-reduced-motion:reduce){.app.nl-slide-in-left,.app.nl-slide-in-right,.nl-transition-old{animation:none!important}}
+</style>
+
+<link rel="manifest" href="manifest.json?v=20261104-approved-home">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=20261104-approved-home">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png?v=20261104-approved-home">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=20261104-approved-home">
+<meta name="theme-color" content="#050606">
+<meta name="application-name" content="NozzoLeague">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NozzoLeague">
+<meta name="mobile-web-app-capable" content="yes">
+
+<style id="nozzo-2027-home-update">
+/* Fotografia originale, senza allungamenti, bande o alterazioni dei volti. */
+html,body{margin:0!important;min-height:100%!important;background:#08101e!important}
+.home-screen{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;height:100dvh!important;overflow:hidden!important;background:#08101e!important}
+.home-bg-blur,.home-overlay{display:none!important}
+.home-poster{position:absolute!important;inset:0!important;left:0!important;top:0!important;transform:none!important;width:100%!important;height:100%!important;aspect-ratio:auto!important;background-image:url("assets/homepage-nozzoleague-2027-foto3-v5.png")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;z-index:2!important}
+/* Il tasto resta indipendente dall'immagine e non altera il disegno. */
+.home-poster .enter-league,.home-poster .enter-league:hover,.home-poster .enter-league:active{position:absolute!important;left:50%!important;top:78.1%!important;bottom:auto!important;transform:translateX(-50%)!important;width:78%!important;height:3.5%!important;min-height:30px!important;max-height:49px!important;min-width:0!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0 8px!important;background:rgba(8,11,22,.76)!important;border:2px solid #ff344a!important;border-radius:40px!important;box-shadow:0 0 15px rgba(240,22,43,.55),inset 0 0 12px rgba(255,40,65,.1)!important;color:#fff!important;font-size:clamp(12px,3.7vw,20px)!important;font-weight:900!important;font-style:italic!important;letter-spacing:.035em!important;white-space:nowrap!important;text-shadow:0 1px 3px #000!important;cursor:pointer!important;-webkit-tap-highlight-color:transparent!important}
+.home-poster .enter-league:focus-visible{outline:2px solid white!important;outline-offset:3px!important}
+
+/* Fascio luminoso animato sotto ENTRA NELLA LEGA: nessuna modifica al poster. */
+.home-poster .enter-league{isolation:isolate!important;overflow:visible!important;animation:nzBeamPulse 3.8s ease-in-out infinite!important}
+.home-poster .enter-league::after{
+  content:"";position:absolute;pointer-events:none;z-index:-1;
+  left:9%;right:9%;height:14px;bottom:-13px;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(255,80,100,.78) 0%,rgba(241,18,44,.42) 35%,transparent 76%);
+  filter:blur(7px);animation:nzBeamGlow 3.8s ease-in-out infinite;
+}
+.home-poster .enter-league::before{
+  content:"";position:absolute;pointer-events:none;left:12%;right:12%;bottom:-5px;height:2px;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,65,88,.18) 20%,#fff0f2 50%,rgba(255,65,88,.18) 80%,transparent 100%);
+  box-shadow:0 0 9px #ff2448;transform:scaleX(.32);opacity:.25;
+  animation:nzBeamSweep 3.8s ease-in-out infinite;
+}
+@keyframes nzBeamPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.13)}}
+@keyframes nzBeamGlow{0%,100%{opacity:.42;transform:scaleX(.78)}50%{opacity:1;transform:scaleX(1.08)}}
+@keyframes nzBeamSweep{0%,12%{transform:translateX(-30%) scaleX(.28);opacity:0}35%,55%{transform:translateX(0) scaleX(1);opacity:.95}80%,100%{transform:translateX(30%) scaleX(.28);opacity:0}}
+@media(prefers-reduced-motion:reduce){.home-poster .enter-league,.home-poster .enter-league::before,.home-poster .enter-league::after{animation:none!important}}
+/* CTA testuale senza riquadro: fascio neon animato e area touch ampia. */
+.home-poster .enter-league,
+.home-poster .enter-league:hover,
+.home-poster .enter-league:active{
+ top:76.9%!important;height:6.1%!important;min-height:48px!important;max-height:76px!important;
+ width:88%!important;padding:0 12px 12px!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;backdrop-filter:none!important;
+ color:#fff!important;font-family:Arial,Helvetica,sans-serif!important;
+ font-size:clamp(16px,4.4vw,26px)!important;font-weight:1000!important;
+ font-style:italic!important;letter-spacing:.045em!important;
+ text-shadow:0 2px 3px #000,0 0 12px rgba(255,255,255,.42),0 0 25px rgba(240,20,46,.32)!important;
+ filter:none!important;transition:text-shadow .25s ease!important;
+}
+.home-poster .enter-league:hover{text-shadow:0 0 12px #fff,0 0 25px #f12340!important}
+.home-poster .enter-league::after{
+ left:6%!important;right:6%!important;bottom:1px!important;height:18px!important;
+ background:radial-gradient(ellipse at center,rgba(255,230,233,.86),rgba(248,40,65,.65) 19%,rgba(214,8,33,.25) 49%,transparent 76%)!important;
+ filter:blur(7px)!important;z-index:0!important;
+}
+.home-poster .enter-league::before{
+ left:5%!important;right:5%!important;bottom:8px!important;height:3px!important;
+ background:linear-gradient(90deg,transparent,rgba(232,24,48,.7) 23%,#fff 50%,rgba(232,24,48,.7) 77%,transparent)!important;
+ box-shadow:0 0 7px #ff2448,0 0 20px rgba(255,25,54,.8)!important;
+}
+@media(prefers-reduced-motion:reduce){.home-poster .enter-league::after{opacity:.6!important}.home-poster .enter-league::before{opacity:.8!important;transform:none!important}}
+
+/* CTA sotto il 2027, sopra la monoposto, con frecce laterali. */
+.home-poster .enter-league,.home-poster .enter-league:hover,.home-poster .enter-league:active{
+ top:83.2%!important;height:5.6%!important;min-height:43px!important;max-height:67px!important;
+ width:94%!important;gap:clamp(8px,2.5vw,20px)!important;padding:0 5px 10px!important;
+ font-size:clamp(13px,4.1vw,21px)!important;
+}
+.home-poster .enter-league .nz-cta-label{white-space:nowrap;position:relative;z-index:2}
+.home-poster .enter-league .nz-arrow{color:#ff172d;font-size:1.55em;font-style:normal;font-weight:1000;letter-spacing:-.25em;padding-right:.25em;text-shadow:0 0 9px #ef1028,0 0 17px #e10820;position:relative;z-index:2;animation:nzArrowPulse 3.8s ease-in-out infinite}
+@keyframes nzArrowPulse{0%,100%{opacity:.85;filter:brightness(1)}50%{opacity:1;filter:brightness(1.5)}}
+@media(prefers-reduced-motion:reduce){.home-poster .enter-league .nz-arrow{animation:none!important}}
+
+/* Correzione finale: font largo come anteprima, icone PNG tutte presenti */
+.nl-brand-name{font-family:"Arial Black",Arial,sans-serif!important;font-weight:1000!important;font-style:italic!important;letter-spacing:-1.3px!important;transform:skew(-8deg)!important;font-size:clamp(27px,7.8vw,58px)!important}
+.nl-brand-year{font-family:"Arial Black",Arial,sans-serif!important;font-style:italic!important;font-weight:1000!important;letter-spacing:-1px!important}
+.nl-section-heading span{font-family:"Arial Black",Arial,sans-serif!important;font-style:italic!important;font-weight:1000!important;letter-spacing:-.6px!important;font-size:clamp(16px,4.8vw,29px)!important}
+.nl-menu-grid .nl-tile .nl-tile-label{font-family:"Arial Black",Arial,sans-serif!important;font-style:italic!important;font-weight:1000!important;letter-spacing:-.6px!important;transform:skew(-7deg)!important;font-size:clamp(13px,3.35vw,23px)!important;line-height:1.12!important;overflow-wrap:normal!important}
+.nl-menu-grid .nl-tile .nl-tile-icon img{width:100%!important;height:100%!important;object-fit:contain!important}
+@media(max-width:390px){.nl-menu-grid .nl-tile .nl-tile-label{font-size:clamp(12px,3.25vw,15px)!important}}
+
+/* NOZZOLEAGUE 2027 — pannelli traslucidi sul tunnel originale.
+   Home fotografica esclusa; icone, testi e bordi rimangono opachi. */
+html body.nl-navigation{
+  background-color:#050506!important;
+  background-image:linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.42)),url("assets/tunnel-2027-hd.webp")!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  background-attachment:fixed!important;
+}
+body.nl-navigation:not(.nl-page-open)::before,
+body.nl-navigation:not(.nl-page-open)::after{display:none!important}
+body.nl-navigation .app{background:transparent!important}
+/* Menu: opacità 85%, mantenendo intatti bordi e bagliori. */
+body.nl-navigation:not(.nl-page-open) .nl-menu-grid .nl-tile{
+  background:linear-gradient(145deg,rgba(32,4,7,.85),rgba(8,8,10,.85) 63%)!important;
+  -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+}
+/* Prossimo GP: opacità 80%, pulsante e bordo bianchi invariati. */
+body.nl-navigation:not(.nl-page-open) .nl-next-banner{
+  background:linear-gradient(125deg,rgba(21,21,26,.80),rgba(8,9,12,.80) 65%,rgba(33,7,13,.80))!important;
+  -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+}
+/* Sezioni interne: 80% di opacità, senza modificare testi e risultati. */
+body.nl-navigation.nl-page-open .panel{
+  background:rgba(8,9,12,.80)!important;
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+}
+body.nl-navigation.nl-page-open th{background:rgba(26,29,31,.84)!important}
+body.nl-navigation.nl-page-open tbody tr:hover td{background:rgba(21,24,25,.78)!important}
+/* Manteniamo lo sfondo visibile anche su Safari iPhone. */
+@media(max-width:760px){
+  html body.nl-navigation{background-attachment:scroll!important}
+  body.nl-navigation::after{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.42)),url("assets/tunnel-2027-hd.webp") center/cover no-repeat!important;
+    display:block!important;
+  }
+  body.nl-navigation:not(.nl-page-open)::after{display:block!important}
+}
+
+/* Correzione tunnel fisso: un unico livello dietro menu e pagine interne. */
+html:has(body.nl-navigation){background:#050506!important}
+html body.nl-navigation{
+  background:#050506!important;
+  background-image:none!important;
+  position:relative;
+  isolation:isolate;
+}
+body.nl-navigation::before{
+  content:""!important;
+  display:block!important;
+  position:fixed!important;
+  inset:0!important;
+  width:100%!important;
+  height:100vh!important;
+  height:100dvh!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  background:linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.42)),url("assets/tunnel-2027-hd.webp") center center / cover no-repeat!important;
+}
+body.nl-navigation::after{display:none!important;content:none!important}
+body.nl-navigation .app{position:relative!important;z-index:1!important;background:transparent!important}
+body.nl-navigation:not(.nl-page-open) .nl-menu{background:transparent!important}
+body.nl-navigation .home-screen{z-index:9999!important}
+@media(max-width:760px){
+  html body.nl-navigation{background:#050506!important;background-image:none!important}
+  body.nl-navigation::before{display:block!important;position:fixed!important;z-index:0!important}
+  body.nl-navigation::after{display:none!important}
+}
+/* Tunnel 2027: livello reale fisso, non pseudo-elemento del body.
+   Visibile nel menu e nelle sezioni; schermata fotografica esclusa. */
+#nl-fixed-tunnel{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:auto;
+  width:100%;
+  height:100vh;
+  height:100svh;
+  pointer-events:none;
+  z-index:0;
+  background-image:linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.42)),url("assets/tunnel-2027-hd.webp");
+  background-position:center center;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+html body.nl-navigation{isolation:auto!important;background:#050506!important;background-image:none!important}
+body.nl-navigation #nl-fixed-tunnel{display:block!important}
+body.nl-navigation::before,body.nl-navigation::after{content:none!important;display:none!important}
+body.nl-navigation .app{position:relative!important;z-index:1!important;background:transparent!important}
+body.nl-navigation:not(.nl-page-open) .nl-menu{background:transparent!important}
+body.nl-navigation .home-screen{z-index:9999!important}
+</style><meta name="nozzoleague-build" content="20261104-universal-slides-v4">
+<script id="nozzo-fresh-launch">
+/* Aggiornamento web app: controlla l'HTML online, senza toccare localStorage. */
+(function () {
+  const meta = document.querySelector('meta[name="nozzoleague-build"]');
+  const build = meta && meta.content;
+  if (!build) return;
+  let checking = false;
+  let lastCheck = 0;
+  let navigating = false;
+  const base = new URL('./index.html', document.baseURI);
+  async function checkLatest(force) {
+    if (checking || navigating || !navigator.onLine || (!force && Date.now() - lastCheck < 30000)) return;
+    checking = true;
+    lastCheck = Date.now();
+    try {
+      const checkURL = new URL(base.href);
+      checkURL.searchParams.set('_nl_check', String(Date.now()));
+      const response = await fetch(checkURL.href, {cache:'no-store', credentials:'same-origin', redirect:'follow'});
+      if (!response.ok) return;
+      const html = await response.text();
+      const match = html.match(/<meta\s+name=["']nozzoleague-build["']\s+content=["']([^"']+)["']/i);
+      if (!match || match[1] === build) return;
+      navigating = true;
+      const target = new URL(base.href);
+      target.searchParams.set('nl_version', match[1]);
+      target.searchParams.set('nl_refresh', String(Date.now()));
+      window.location.replace(target.href);
+    } catch (_) { /* Senza rete continua a funzionare la versione disponibile. */ }
+    finally { checking = false; }
+  }
+  // Anche le app installate su Home possono restare aperte in background.
+  window.addEventListener('pageshow', () => checkLatest(true));
+  window.addEventListener('focus', () => checkLatest(false));
+  window.addEventListener('online', () => checkLatest(true));
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') checkLatest(true);
+  });
+  // Recupera anche i casi in cui iOS non emette un evento di riapertura.
+  setInterval(() => { if (document.visibilityState === 'visible') checkLatest(false); }, 60000);
+})();
+</script>
+<script id="nozzo-service-worker-registration">
+(function(){
+  if(!('serviceWorker' in navigator) || !window.isSecureContext) return;
+  let refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(!refreshing){refreshing=true;window.location.reload();}
+  });
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'})
+      .then(function(reg){
+        function check(){reg.update().catch(function(){});}
+        document.addEventListener('visibilitychange',function(){if(!document.hidden)check();});
+        window.addEventListener('pageshow',check);
+        check();
+      }).catch(function(err){console.warn('Aggiornamento offline non disponibile:',err);});
+  });
+})();
+</script>
+</head>
+<body>
+<div id="nl-fixed-tunnel" aria-hidden="true"></div>
+<div id="nlPageFade" aria-hidden="true"></div>
+
+<div class="home-screen" id="homeScreen">
+  <div class="home-bg-blur"></div>
+  <div class="home-poster"><button class="enter-league" onclick="enterLeague()" aria-label="Entra nella lega"><span class="nz-arrow" aria-hidden="true">❯❯</span><span class="nz-cta-label">ENTRA NELLA LEGA</span><span class="nz-arrow" aria-hidden="true">❯❯</span></button></div>
+</div>
+
+<div class="app">
+  <header class="header">
+    <div class="brand">
+      <div class="brand-lockup readable-brand">
+        <img class="nl-inner-f1" src="assets/menu/f1-logo-r.png?v=20261104-icons-restore" alt="F1®">
+        <div class="nl-inner-wordmark" aria-label="NozzoLeague 2027">
+          <div class="nl-inner-name">NOZZOLEAGUE</div>
+          <div class="nl-inner-year">2027</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="gear" onclick="openEditor()" title="Modifica">⚙</button>
+  </header>
+
+<nav id="nlMenu" class="nl-menu" aria-label="Menu NozzoLeague">
+ <div class="nl-brand2027" aria-label="F1 NozzoLeague 2027">
+   <img class="nl-f1mark" src="assets/menu/f1-logo-r.png?v=20261104-icons-restore" alt="Formula 1®">
+   <div class="nl-brand-name">NOZZOLEAGUE</div>
+   <div class="nl-brand-year"><span>2027</span></div>
+ </div>
+ <div class="nl-section-heading"><span>ESPLORA IL PADDOCK</span></div>
+ <div class="nl-menu-grid">
+ <button class="nl-tile" onclick="nlShow('drivers')"><span class="nl-tile-icon"><img src="assets/menu/piloti.png?v=20261104-icons-restore" alt="" loading="eager"></span><span class="nl-tile-label">CLASSIFICA<br>PILOTI</span><span class="nl-tile-arrow">➜</span></button>
+ <button class="nl-tile" onclick="nlShow('teams')"><span class="nl-tile-icon"><img src="assets/menu/costruttori.png?v=20261104-icons-restore" alt="" loading="eager"></span><span class="nl-tile-label">CLASSIFICA<br>COSTRUTTORI</span><span class="nl-tile-arrow">➜</span></button>
+ <button class="nl-tile" onclick="nlShow('calendar')"><span class="nl-tile-icon"><img src="assets/menu/calendario.png?v=20261104-icons-restore" alt="" loading="eager"></span><span class="nl-tile-label">CALENDARIO<br>2027</span><span class="nl-tile-arrow">➜</span></button>
+ <button class="nl-tile" onclick="nlShow('last')"><span class="nl-tile-icon"><img src="assets/menu/ultima_gara.png?v=20261104-icons-restore" alt="" loading="eager"></span><span class="nl-tile-label">ULTIMA<br>GARA</span><span class="nl-tile-arrow">➜</span></button>
+ </div>
+ <button id="nlNextBanner" class="nl-next-banner" type="button" onclick="nlOpenNextCircuit()" aria-label="Apri informazioni sul prossimo Gran Premio">
+  <div class="nl-next-copy"><span class="nl-next-tag">PROSSIMO GP <i>///</i></span><strong id="nlNextCountry">AUSTRALIA</strong><em id="nlNextCity">MELBOURNE</em><small id="nlNextCircuit">ALBERT PARK CIRCUIT</small></div>
+  <div class="nl-next-track"><img id="nlNextTrackImg" alt="Sagoma del prossimo circuito" src="assets/tracks/melbourne.png"></div><span class="nl-next-go" aria-hidden="true">›</span>
+ </button>
+ <div class="nl-menu-footer"><span>NOZZOLEAGUE / 2027</span></div>
+</nav><div id="nlBack" class="nl-back" hidden><button onclick="nlShow('menu')">‹ TORNA AL MENU</button></div>
+  <main>
+    <section class="main-grid" id="nlGrid">
+      <article class="panel" data-nl-page="drivers">
+        <div class="panel-title"><span class="icon">🏆</span> CLASSIFICA PILOTI</div>
+        <div class="table-wrap"><table id="driversTable"><thead><tr><th>Pos</th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead><tbody><tr><td class="pos">1</td><td><b>Mino</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #00a19c;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>Mercedes</span></td><td class="points">25</td></tr><tr><td class="pos">2</td><td><b>Pierre Gasly</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff87bc;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span>Alpine</span></td><td class="points">18</td></tr><tr><td class="pos">3</td><td><b>Sergio Perez</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #d2d2d2;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">C</span>Cadillac</span></td><td class="points">15</td></tr><tr><td class="pos">4</td><td><b>Alexander Albon</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #64c4ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">W</span>Williams</span></td><td class="points">12</td></tr><tr><td class="pos">5</td><td><b>Oscar Piastri*</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff8000;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>McLaren</span></td><td class="points">10</td></tr><tr><td class="pos">6</td><td><b>Nico Hulkenberg</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #c9002b;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span>Audi</span></td><td class="points">8</td></tr><tr><td class="pos">7</td><td><b>Lando Norris*</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff8000;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>McLaren</span></td><td class="points">6</td></tr><tr><td class="pos">8</td><td><b>Peppone</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #e8002d;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">F</span>Ferrari</span></td><td class="points">4</td></tr><tr><td class="pos">9</td><td><b>Fernando Alonso</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #229971;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">AM</span>Aston Martin</span></td><td class="points">2</td></tr><tr><td class="pos">10</td><td><b>Gabriel Bortoleto</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #c9002b;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span>Audi</span></td><td class="points">1</td></tr><tr><td class="pos">11</td><td><b>Arvid Lindblad</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #6692ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RB</span>Racing Bulls</span></td><td class="points">0</td></tr><tr><td class="pos">12</td><td><b>Carlos Sainz</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #64c4ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">W</span>Williams</span></td><td class="points">0</td></tr><tr><td class="pos">13</td><td><b>Charles Leclerc*</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #e8002d;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">F</span>Ferrari</span></td><td class="points">0</td></tr><tr><td class="pos">14</td><td><b>Cupo</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #3671c6;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RBR</span>Red Bull Racing</span></td><td class="points">0</td></tr><tr><td class="pos">15</td><td><b>Esteban Ocon</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #b6babd;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">HFT</span>Haas F1 Team</span></td><td class="points">0</td></tr><tr><td class="pos">16</td><td><b>Franco Colapinto</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff87bc;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span>Alpine</span></td><td class="points">0</td></tr><tr><td class="pos">17</td><td><b>George Russell*</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #00a19c;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>Mercedes</span></td><td class="points">0</td></tr><tr><td class="pos">18</td><td><b>Isack Hadjar*</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #3671c6;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RBR</span>Red Bull Racing</span></td><td class="points">0</td></tr><tr><td class="pos">19</td><td><b>Kimi Antonelli*</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #00a19c;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>Mercedes</span></td><td class="points">0</td></tr><tr><td class="pos">20</td><td><b>Lance Stroll</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #229971;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">AM</span>Aston Martin</span></td><td class="points">0</td></tr><tr><td class="pos">21</td><td><b>Lewis Hamilton*</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #e8002d;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">F</span>Ferrari</span></td><td class="points">0</td></tr><tr><td class="pos">22</td><td><b>Liam Lawson</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #6692ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RB</span>Racing Bulls</span></td><td class="points">0</td></tr><tr><td class="pos">23</td><td><b>Max Verstappen*</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #3671c6;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RBR</span>Red Bull Racing</span></td><td class="points">0</td></tr><tr><td class="pos">24</td><td><b>Mizzu</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #3671c6;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RBR</span>Red Bull Racing</span></td><td class="points">0</td></tr><tr><td class="pos">25</td><td><b>Nicolino</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #00a19c;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>Mercedes</span></td><td class="points">0</td></tr><tr><td class="pos">26</td><td><b>Oliver Bearman</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #b6babd;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">HFT</span>Haas F1 Team</span></td><td class="points">0</td></tr><tr><td class="pos">27</td><td><b>Pando</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff8000;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>McLaren</span></td><td class="points">0</td></tr><tr><td class="pos">28</td><td><b>Pazz</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff8000;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>McLaren</span></td><td class="points">0</td></tr><tr><td class="pos">29</td><td><b>Pelo</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #e8002d;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">F</span>Ferrari</span></td><td class="points">0</td></tr><tr><td class="pos">30</td><td><b>Valtteri Bottas</b></td><td><span class="team"><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #d2d2d2;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">C</span>Cadillac</span></td><td class="points">0</td></tr></tbody><tfoot><tr><td colspan="4" style="padding:10px 12px;color:var(--muted);font-size:11px;border-top:1px solid #242729">* Pilota ufficiale di riserva.</td></tr></tfoot></table></div>
+      </article>
+
+      <article class="panel" data-nl-page="teams">
+        <div class="panel-title"><span class="icon">🏎</span> CLASSIFICA COSTRUTTORI</div>
+        <div class="table-wrap"><table id="teamsTable"><thead><tr><th>Pos</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead><tbody><tr><td class="pos">1</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #00a19c;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span><b>Mercedes</b></td><td class="points">25</td></tr><tr><td class="pos">2</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff87bc;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span><b>Alpine</b></td><td class="points">18</td></tr><tr><td class="pos">3</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff8000;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span><b>McLaren</b></td><td class="points">16</td></tr><tr><td class="pos">4</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #d2d2d2;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">C</span><b>Cadillac</b></td><td class="points">15</td></tr><tr><td class="pos">5</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #64c4ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">W</span><b>Williams</b></td><td class="points">12</td></tr><tr><td class="pos">6</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #c9002b;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span><b>Audi</b></td><td class="points">9</td></tr><tr><td class="pos">7</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #e8002d;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">F</span><b>Ferrari</b></td><td class="points">4</td></tr><tr><td class="pos">8</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #229971;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">AM</span><b>Aston Martin</b></td><td class="points">2</td></tr><tr><td class="pos">9</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #b6babd;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">HFT</span><b>Haas F1 Team</b></td><td class="points">0</td></tr><tr><td class="pos">10</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #6692ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RB</span><b>Racing Bulls</b></td><td class="points">0</td></tr><tr><td class="pos">11</td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #3671c6;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RBR</span><b>Red Bull Racing</b></td><td class="points">0</td></tr></tbody></table></div>
+      </article>
+
+      <article class="panel calendar" data-nl-page="calendar">
+        <div class="panel-title"><span class="icon">▦</span> CALENDARIO</div>
+        <div class="table-wrap"><table id="calendarTable"><thead><tr><th>Round</th><th>GP</th><th>Stato</th></tr></thead><tbody><tr class="calendar-history-row" onclick="openRaceHistory(1)"><td class="pos">1</td><td><b>Australia</b></td><td class="next-state"><span class="dot"></span>Prossima</td></tr><tr class=""><td class="pos">2</td><td><b>Cina</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">3</td><td><b>Giappone</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">4</td><td><b>Miami</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">5</td><td><b>Canada</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">6</td><td><b>Monaco</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">7</td><td><b>Barcellona-Catalogna</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">8</td><td><b>Austria</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">9</td><td><b>Gran Bretagna</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">10</td><td><b>Belgio</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">11</td><td><b>Ungheria</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">12</td><td><b>Paesi Bassi</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">13</td><td><b>Italia</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">14</td><td><b>Spagna</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">15</td><td><b>Azerbaijan</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">16</td><td><b>Singapore</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">17</td><td><b>Stati Uniti</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">18</td><td><b>Messico</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">19</td><td><b>Brasile</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">20</td><td><b>Las Vegas</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">21</td><td><b>Qatar</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr><tr class=""><td class="pos">22</td><td><b>Abu Dhabi</b></td><td class="wait"><span class="dot"></span>In attesa</td></tr></tbody></table></div>
+      </article>
+    </section>
+
+    <section class="panel last-race" data-nl-page="last">
+      <div class="panel-title last-head"><span class="icon">🏁</span> ULTIMA GARA <span>|</span><span class="gp" id="lastGp">AUSTRALIA</span></div>
+      <div class="results-grid" id="resultsGrid"><table><thead><tr><th>Pos</th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead><tbody><tr><td class="pos">1</td><td><b>Mino</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #00a19c;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>Mercedes</td><td class="points">25</td></tr><tr><td class="pos">2</td><td><b>Pierre Gasly</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff87bc;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span>Alpine</td><td class="points">18</td></tr><tr><td class="pos">3</td><td><b>Sergio Perez</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #d2d2d2;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">C</span>Cadillac</td><td class="points">15</td></tr><tr><td class="pos">4</td><td><b>Alexander Albon</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #64c4ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">W</span>Williams</td><td class="points">12</td></tr><tr><td class="pos">5</td><td><b>Oscar Piastri</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff8000;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>McLaren</td><td class="points">10</td></tr><tr><td class="pos">6</td><td><b>Nico Hulkenberg</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #c9002b;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span>Audi</td><td class="points">8</td></tr><tr><td class="pos">7</td><td><b>Lando Norris</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff8000;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>McLaren</td><td class="points">6</td></tr><tr><td class="pos">8</td><td><b>Peppone</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #e8002d;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">F</span>Ferrari</td><td class="points">4</td></tr><tr><td class="pos">9</td><td><b>Fernando Alonso</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #229971;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">AM</span>Aston Martin</td><td class="points">2</td></tr><tr><td class="pos">10</td><td><b>Gabriel Bortoleto</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #c9002b;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span>Audi</td><td class="points">1</td></tr><tr><td class="pos">11</td><td><b>Valtteri Bottas</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #d2d2d2;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">C</span>Cadillac</td><td class="points">0</td></tr></tbody></table><table><thead><tr><th>Pos</th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead><tbody><tr><td class="pos">12</td><td><b>Liam Lawson</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #6692ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RB</span>Racing Bulls</td><td class="points">0</td></tr><tr><td class="pos">13</td><td><b>Franco Colapinto</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #ff87bc;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">A</span>Alpine</td><td class="points">0</td></tr><tr><td class="pos">14</td><td><b>Oliver Bearman</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #b6babd;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">HFT</span>Haas F1 Team</td><td class="points">0</td></tr><tr><td class="pos">15</td><td><b>Carlos Sainz</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #64c4ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">W</span>Williams</td><td class="points">0</td></tr><tr><td class="pos">16</td><td><b>Arvid Lindblad</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #6692ff;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RB</span>Racing Bulls</td><td class="points">0</td></tr><tr><td class="pos">17</td><td><b>Isack Hadjar</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #3671c6;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RBR</span>Red Bull Racing</td><td class="points">0</td></tr><tr><td class="pos">18</td><td><b>Esteban Ocon</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #b6babd;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">HFT</span>Haas F1 Team</td><td class="points">0</td></tr><tr><td class="pos">19</td><td><b>Lance Stroll</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #229971;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">AM</span>Aston Martin</td><td class="points">0</td></tr><tr><td class="pos">20</td><td><b>Nicolino</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #00a19c;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">M</span>Mercedes</td><td class="points">0</td></tr><tr><td class="pos">21</td><td><b>Mizzu</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #3671c6;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">RBR</span>Red Bull Racing</td><td class="points">0</td></tr><tr><td class="pos">22</td><td><b>Pelo</b></td><td><span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid #e8002d;border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">F</span>Ferrari</td><td class="points">0</td></tr></tbody></table></div>
+    </section>
+  </main>
+
+  <footer class="footer">F1 NOZZOLEAGUE 2026 — STAGIONE UFFICIALE<br><span id="lastUpdated" style="font-size:11px;letter-spacing:0;color:#8a8f92">Ultimo aggiornamento: 06/08/2026, 01:14</span><br><span style="font-size:10px;letter-spacing:.8px;color:#666">F1 NozzoLeague v2.1 Stable</span></footer>
+</div>
+
+<div class="modal" id="modal">
+  <div class="editor">
+    <div class="editor-head"><div><h2>Gestione NozzoLeague</h2><div class="note">Modifica i dati e premi Salva.</div></div><button class="minor" onclick="exportHtml()" style="margin-left:auto;white-space:nowrap">📄 Esporta HTML</button>
+      <button class="close" onclick="closeEditor()">Chiudi</button></div>
+    <div class="tabs">
+      <button class="tab" onclick="showTab('drivers',this)">Piloti</button>
+      <button class="tab active" onclick="showTab('calendar',this)">Calendario</button>
+      <button class="tab" onclick="showTab('race',this)">Ultima gara</button>
+    </div>
+    <div class="edit-panel" id="edit-drivers"><div class="table-wrap"><table class="edit-table" id="driversEdit"><thead><tr><th>Pilota</th><th>Scuderia</th><th>Punti</th></tr></thead><tbody><tr><td><input data-d="0" data-k="0" value="Mino"></td><td><select data-d="0" data-k="1"><option selected="">Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="0" data-k="2" value="25"></td></tr><tr><td><input data-d="1" data-k="0" value="Arvid Lindblad"></td><td><select data-d="1" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option selected="">Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="1" data-k="2" value="0"></td></tr><tr><td><input data-d="2" data-k="0" value="Alexander Albon"></td><td><select data-d="2" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option selected="">Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="2" data-k="2" value="12"></td></tr><tr><td><input data-d="3" data-k="0" value="Liam Lawson"></td><td><select data-d="3" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option selected="">Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="3" data-k="2" value="0"></td></tr><tr><td><input data-d="4" data-k="0" value="Lance Stroll"></td><td><select data-d="4" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option selected="">Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="4" data-k="2" value="0"></td></tr><tr><td><input data-d="5" data-k="0" value="Esteban Ocon"></td><td><select data-d="5" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option selected="">Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="5" data-k="2" value="0"></td></tr><tr><td><input data-d="6" data-k="0" value="Nico Hulkenberg"></td><td><select data-d="6" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option selected="">Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="6" data-k="2" value="8"></td></tr><tr><td><input data-d="7" data-k="0" value="Gabriel Bortoleto"></td><td><select data-d="7" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option selected="">Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="7" data-k="2" value="1"></td></tr><tr><td><input data-d="8" data-k="0" value="Peppone"></td><td><select data-d="8" data-k="1"><option>Mercedes</option><option selected="">Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="8" data-k="2" value="4"></td></tr><tr><td><input data-d="9" data-k="0" value="Carlos Sainz"></td><td><select data-d="9" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option selected="">Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="9" data-k="2" value="0"></td></tr><tr><td><input data-d="10" data-k="0" value="Cupo"></td><td><select data-d="10" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option selected="">Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="10" data-k="2" value="0"></td></tr><tr><td><input data-d="11" data-k="0" value="Fernando Alonso"></td><td><select data-d="11" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option selected="">Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="11" data-k="2" value="2"></td></tr><tr><td><input data-d="12" data-k="0" value="Franco Colapinto"></td><td><select data-d="12" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option selected="">Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="12" data-k="2" value="0"></td></tr><tr><td><input data-d="13" data-k="0" value="Mizzu"></td><td><select data-d="13" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option selected="">Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="13" data-k="2" value="0"></td></tr><tr><td><input data-d="14" data-k="0" value="Nicolino"></td><td><select data-d="14" data-k="1"><option selected="">Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="14" data-k="2" value="0"></td></tr><tr><td><input data-d="15" data-k="0" value="Oliver Bearman"></td><td><select data-d="15" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option selected="">Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="15" data-k="2" value="0"></td></tr><tr><td><input data-d="16" data-k="0" value="Pando"></td><td><select data-d="16" data-k="1"><option>Mercedes</option><option>Ferrari</option><option selected="">McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="16" data-k="2" value="0"></td></tr><tr><td><input data-d="17" data-k="0" value="Pazz"></td><td><select data-d="17" data-k="1"><option>Mercedes</option><option>Ferrari</option><option selected="">McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="17" data-k="2" value="0"></td></tr><tr><td><input data-d="18" data-k="0" value="Pelo"></td><td><select data-d="18" data-k="1"><option>Mercedes</option><option selected="">Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="18" data-k="2" value="0"></td></tr><tr><td><input data-d="19" data-k="0" value="Pierre Gasly"></td><td><select data-d="19" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option selected="">Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="19" data-k="2" value="18"></td></tr><tr><td><input data-d="20" data-k="0" value="Sergio Perez"></td><td><select data-d="20" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option selected="">Cadillac</option></select></td><td><input type="number" min="0" data-d="20" data-k="2" value="15"></td></tr><tr><td><input data-d="21" data-k="0" value="Valtteri Bottas"></td><td><select data-d="21" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option selected="">Cadillac</option></select></td><td><input type="number" min="0" data-d="21" data-k="2" value="0"></td></tr><tr><td><input data-d="22" data-k="0" value="George Russell"></td><td><select data-d="22" data-k="1"><option selected="">Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="22" data-k="2" value="0"></td></tr><tr><td><input data-d="23" data-k="0" value="Kimi Antonelli"></td><td><select data-d="23" data-k="1"><option selected="">Mercedes</option><option>Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="23" data-k="2" value="0"></td></tr><tr><td><input data-d="24" data-k="0" value="Charles Leclerc"></td><td><select data-d="24" data-k="1"><option>Mercedes</option><option selected="">Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="24" data-k="2" value="0"></td></tr><tr><td><input data-d="25" data-k="0" value="Lewis Hamilton"></td><td><select data-d="25" data-k="1"><option>Mercedes</option><option selected="">Ferrari</option><option>McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="25" data-k="2" value="0"></td></tr><tr><td><input data-d="26" data-k="0" value="Lando Norris"></td><td><select data-d="26" data-k="1"><option>Mercedes</option><option>Ferrari</option><option selected="">McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="26" data-k="2" value="6"></td></tr><tr><td><input data-d="27" data-k="0" value="Oscar Piastri"></td><td><select data-d="27" data-k="1"><option>Mercedes</option><option>Ferrari</option><option selected="">McLaren</option><option>Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="27" data-k="2" value="10"></td></tr><tr><td><input data-d="28" data-k="0" value="Max Verstappen"></td><td><select data-d="28" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option selected="">Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="28" data-k="2" value="0"></td></tr><tr><td><input data-d="29" data-k="0" value="Isack Hadjar"></td><td><select data-d="29" data-k="1"><option>Mercedes</option><option>Ferrari</option><option>McLaren</option><option selected="">Red Bull Racing</option><option>Racing Bulls</option><option>Alpine</option><option>Haas F1 Team</option><option>Audi</option><option>Williams</option><option>Aston Martin</option><option>Cadillac</option></select></td><td><input type="number" min="0" data-d="29" data-k="2" value="0"></td></tr></tbody></table></div></div>
+    <div class="edit-panel active" id="edit-calendar"><div class="table-wrap"><table class="edit-table" id="calendarEdit"><thead><tr><th>Round</th><th>GP</th><th>Stato</th></tr></thead><tbody><tr><td><input type="number" data-c="0" data-k="0" value="1"></td><td><input data-c="0" data-k="1" value="Australia"></td><td><select data-c="0" data-k="2"><option>In attesa</option><option>Prossima</option><option selected="">Disputata</option></select></td></tr><tr><td><input type="number" data-c="1" data-k="0" value="2"></td><td><input data-c="1" data-k="1" value="Cina"></td><td><select data-c="1" data-k="2"><option>In attesa</option><option selected="">Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="2" data-k="0" value="3"></td><td><input data-c="2" data-k="1" value="Giappone"></td><td><select data-c="2" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="3" data-k="0" value="4"></td><td><input data-c="3" data-k="1" value="Miami"></td><td><select data-c="3" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="4" data-k="0" value="5"></td><td><input data-c="4" data-k="1" value="Canada"></td><td><select data-c="4" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="5" data-k="0" value="6"></td><td><input data-c="5" data-k="1" value="Monaco"></td><td><select data-c="5" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="6" data-k="0" value="7"></td><td><input data-c="6" data-k="1" value="Barcellona-Catalogna"></td><td><select data-c="6" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="7" data-k="0" value="8"></td><td><input data-c="7" data-k="1" value="Austria"></td><td><select data-c="7" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="8" data-k="0" value="9"></td><td><input data-c="8" data-k="1" value="Gran Bretagna"></td><td><select data-c="8" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="9" data-k="0" value="10"></td><td><input data-c="9" data-k="1" value="Belgio"></td><td><select data-c="9" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="10" data-k="0" value="11"></td><td><input data-c="10" data-k="1" value="Ungheria"></td><td><select data-c="10" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="11" data-k="0" value="12"></td><td><input data-c="11" data-k="1" value="Paesi Bassi"></td><td><select data-c="11" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="12" data-k="0" value="13"></td><td><input data-c="12" data-k="1" value="Italia"></td><td><select data-c="12" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="13" data-k="0" value="14"></td><td><input data-c="13" data-k="1" value="Spagna"></td><td><select data-c="13" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="14" data-k="0" value="15"></td><td><input data-c="14" data-k="1" value="Azerbaijan"></td><td><select data-c="14" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="15" data-k="0" value="16"></td><td><input data-c="15" data-k="1" value="Singapore"></td><td><select data-c="15" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="16" data-k="0" value="17"></td><td><input data-c="16" data-k="1" value="Stati Uniti"></td><td><select data-c="16" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="17" data-k="0" value="18"></td><td><input data-c="17" data-k="1" value="Messico"></td><td><select data-c="17" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="18" data-k="0" value="19"></td><td><input data-c="18" data-k="1" value="Brasile"></td><td><select data-c="18" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="19" data-k="0" value="20"></td><td><input data-c="19" data-k="1" value="Las Vegas"></td><td><select data-c="19" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="20" data-k="0" value="21"></td><td><input data-c="20" data-k="1" value="Qatar"></td><td><select data-c="20" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr><tr><td><input type="number" data-c="21" data-k="0" value="22"></td><td><input data-c="21" data-k="1" value="Abu Dhabi"></td><td><select data-c="21" data-k="2"><option selected="">In attesa</option><option>Prossima</option><option>Disputata</option></select></td></tr></tbody></table></div></div>
+    <div class="edit-panel" id="edit-race">
+      <div class="presence-box">
+        <div class="presence-title">Piloti NozzoLeague presenti</div>
+        <div class="presence-grid" id="presenceGrid">
+    <label class="presence-item">
+      <input type="checkbox" checked="" onchange="togglePresence('Peppone',this.checked)">
+      <span><b>Peppone</b><small>Ferrari · sostituisce Charles Leclerc</small></span>
+    </label>
+  
+    <label class="presence-item">
+      <input type="checkbox" checked="" onchange="togglePresence('Pelo',this.checked)">
+      <span><b>Pelo</b><small>Ferrari · sostituisce Lewis Hamilton</small></span>
+    </label>
+  
+    <label class="presence-item">
+      <input type="checkbox" checked="" onchange="togglePresence('Mizzu',this.checked)">
+      <span><b>Mizzu</b><small>Red Bull Racing · sostituisce Max Verstappen</small></span>
+    </label>
+  
+    <label class="presence-item">
+      <input type="checkbox" onchange="togglePresence('Cupo',this.checked)">
+      <span><b>Cupo</b><small>Red Bull Racing · sostituisce Isack Hadjar</small></span>
+    </label>
+  
+    <label class="presence-item">
+      <input type="checkbox" onchange="togglePresence('Pando',this.checked)">
+      <span><b>Pando</b><small>McLaren · sostituisce Lando Norris</small></span>
+    </label>
+  
+    <label class="presence-item">
+      <input type="checkbox" onchange="togglePresence('Pazz',this.checked)">
+      <span><b>Pazz</b><small>McLaren · sostituisce Oscar Piastri</small></span>
+    </label>
+  
+    <label class="presence-item">
+      <input type="checkbox" checked="" onchange="togglePresence('Mino',this.checked)">
+      <span><b>Mino</b><small>Mercedes · sostituisce George Russell</small></span>
+    </label>
+  
+    <label class="presence-item">
+      <input type="checkbox" checked="" onchange="togglePresence('Nicolino',this.checked)">
+      <span><b>Nicolino</b><small>Mercedes · sostituisce Kimi Antonelli</small></span>
+    </label>
+  </div>
+      </div>
+
+      <div class="finish-note">
+        La griglia contiene sempre 22 vetture. Se un pilota NozzoLeague è assente, torna automaticamente il pilota ufficiale che sostituisce.
+      </div>
+
+      <div class="table-wrap">
+        <div id="nzSprintEditor" class="nz-sprint-panel"></div>
+        <table class="edit-table" id="raceEdit"><thead><tr><th>Posizione</th><th>Pilota</th><th>Scuderia</th></tr></thead><tbody>
+      <tr>
+        <td><b>1°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(0,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>2°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(1,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>3°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(2,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>4°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(3,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>5°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(4,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>6°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(5,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>7°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(6,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>8°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(7,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>9°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(8,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>10°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(9,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>11°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(10,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>12°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(11,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>13°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(12,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>14°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(13,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>15°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(14,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>16°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(15,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>17°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(16,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>18°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(17,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>19°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(18,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>20°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(19,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>21°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(20,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><b>22°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(21,this.value)">
+            <option value="">— Seleziona pilota —</option><option value="Mino">Mino</option><option value="Nicolino">Nicolino</option><option value="Peppone">Peppone</option><option value="Pelo">Pelo</option><option value="Lando Norris">Lando Norris</option><option value="Oscar Piastri">Oscar Piastri</option><option value="Mizzu">Mizzu</option><option value="Isack Hadjar">Isack Hadjar</option><option value="Liam Lawson">Liam Lawson</option><option value="Arvid Lindblad">Arvid Lindblad</option><option value="Pierre Gasly">Pierre Gasly</option><option value="Franco Colapinto">Franco Colapinto</option><option value="Esteban Ocon">Esteban Ocon</option><option value="Oliver Bearman">Oliver Bearman</option><option value="Nico Hulkenberg">Nico Hulkenberg</option><option value="Gabriel Bortoleto">Gabriel Bortoleto</option><option value="Carlos Sainz">Carlos Sainz</option><option value="Alexander Albon">Alexander Albon</option><option value="Fernando Alonso">Fernando Alonso</option><option value="Lance Stroll">Lance Stroll</option><option value="Sergio Perez">Sergio Perez</option><option value="Valtteri Bottas">Valtteri Bottas</option>
+          </select>
+        </td>
+        <td></td>
+      </tr></tbody></table>
+      </div>
+
+      <div class="actions">
+        <button class="save" onclick="completeGrandPrix()">🏁 Concludi GP</button>
+        <button class="minor danger" onclick="undoLastGrandPrix()">↩️ Annulla ultimo GP</button>
+      </div>
+    </div>
+    <div class="actions">
+        <button class="minor" onclick="addResult()">+ Aggiungi posizione</button>
+        <button class="save" onclick="completeGrandPrix()">🏁 Concludi GP</button>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="save" onclick="saveAll()">Salva</button>
+      <button class="minor" onclick="exportHtml()">Esporta HTML</button>
+      <button class="minor" onclick="exportBackup()">Esporta backup</button>
+      <button class="minor" onclick="document.getElementById('backupInput').click()">Importa backup</button>
+      <input id="backupInput" hidden="" type="file" accept=".json" onchange="importBackup(event)">
+    </div>
+  </div>
+
+
+<script>
+const teams = {
+  "Mercedes":"#00a19c","Ferrari":"#e8002d","McLaren":"#ff8000","Red Bull Racing":"#3671c6",
+  "Racing Bulls":"#6692ff","Alpine":"#ff87bc","Haas F1 Team":"#b6babd","Audi":"#c9002b",
+  "Williams":"#64c4ff","Aston Martin":"#229971","Cadillac":"#d2d2d2"
+};
+
+const officialGrid = [
+  ["George Russell","Mercedes"],
+  ["Kimi Antonelli","Mercedes"],
+  ["Charles Leclerc","Ferrari"],
+  ["Lewis Hamilton","Ferrari"],
+  ["Lando Norris","McLaren"],
+  ["Oscar Piastri","McLaren"],
+  ["Max Verstappen","Red Bull Racing"],
+  ["Isack Hadjar","Red Bull Racing"],
+  ["Liam Lawson","Racing Bulls"],
+  ["Arvid Lindblad","Racing Bulls"],
+  ["Pierre Gasly","Alpine"],
+  ["Franco Colapinto","Alpine"],
+  ["Esteban Ocon","Haas F1 Team"],
+  ["Oliver Bearman","Haas F1 Team"],
+  ["Nico Hulkenberg","Audi"],
+  ["Gabriel Bortoleto","Audi"],
+  ["Carlos Sainz","Williams"],
+  ["Alexander Albon","Williams"],
+  ["Fernando Alonso","Aston Martin"],
+  ["Lance Stroll","Aston Martin"],
+  ["Sergio Perez","Cadillac"],
+  ["Valtteri Bottas","Cadillac"]
+];
+
+const leagueSubstitutions = [
+  {human:"Peppone", official:"Liam Lawson", team:"Racing Bulls"},
+  {human:"Pelo", official:"Arvid Lindblad", team:"Racing Bulls"},
+  {human:"Pando", official:"Valtteri Bottas", team:"Cadillac"},
+  {human:"Pazz", official:"Sergio Perez", team:"Cadillac"},
+  {human:"Mino", official:"Gabriel Bortoleto", team:"Audi"},
+  {human:"Nicolino", official:"Nico Hulkenberg", team:"Audi"},
+  {human:"Cupo", official:"Oliver Bearman", team:"Haas F1 Team"},
+  {human:"Mizzu", official:"Esteban Ocon", team:"Haas F1 Team"}
+];
+
+const base={"drivers":[["Mino","Audi",0],["Arvid Lindblad","Racing Bulls",0],["Alexander Albon","Williams",0],["Liam Lawson","Racing Bulls",0],["Lance Stroll","Aston Martin",0],["Esteban Ocon","Haas F1 Team",0],["Nico Hulkenberg","Audi",0],["Gabriel Bortoleto","Audi",0],["Peppone","Racing Bulls",0],["Carlos Sainz","Williams",0],["Cupo","Haas F1 Team",0],["Fernando Alonso","Aston Martin",0],["Franco Colapinto","Alpine",0],["Mizzu","Haas F1 Team",0],["Nicolino","Audi",0],["Oliver Bearman","Haas F1 Team",0],["Pando","Cadillac",0],["Pazz","Cadillac",0],["Pelo","Racing Bulls",0],["Pierre Gasly","Alpine",0],["Sergio Perez","Cadillac",0],["Valtteri Bottas","Cadillac",0],["George Russell","Mercedes",0],["Kimi Antonelli","Mercedes",0],["Charles Leclerc","Ferrari",0],["Lewis Hamilton","Ferrari",0],["Lando Norris","McLaren",0],["Oscar Piastri","McLaren",0],["Max Verstappen","Red Bull Racing",0],["Isack Hadjar","Red Bull Racing",0]],"calendar":[[1,"Australia","Prossima"],[2,"Cina","In attesa"],[3,"Giappone","In attesa"],[4,"Bahrain","In attesa"],[5,"Arabia Saudita","In attesa"],[6,"Miami","In attesa"],[7,"Canada","In attesa"],[8,"Monaco","In attesa"],[9,"Barcellona-Catalogna","In attesa"],[10,"Austria","In attesa"],[11,"Gran Bretagna","In attesa"],[12,"Belgio","In attesa"],[13,"Ungheria","In attesa"],[14,"Paesi Bassi","In attesa"],[15,"Italia","In attesa"],[16,"Spagna","In attesa"],[17,"Azerbaijan","In attesa"],[18,"Singapore","In attesa"],[19,"Stati Uniti","In attesa"],[20,"Messico","In attesa"],[21,"Brasile","In attesa"],[22,"Las Vegas","In attesa"],[23,"Qatar","In attesa"],[24,"Abu Dhabi","In attesa"],[25,"Imola","In attesa"]],"race":{"name":"Nessuna gara","results":[],"completedRound":null},"lastUpdated":"","completedRounds":[],"pendingRace":{"round":1,"results":[[1,"","","",0],[2,"","","",0],[3,"","","",0],[4,"","","",0],[5,"","","",0],[6,"","","",0],[7,"","","",0],[8,"","","",0],[9,"","","",0],[10,"","","",0],[11,"","","",0],[12,"","","",0],[13,"","","",0],[14,"","","",0],[15,"","","",0],[16,"","","",0],[17,"","","",0],[18,"","","",0],[19,"","","",0],[20,"","","",0],[21,"","","",0],[22,"","","",0]]},"undoStack":[],"raceHistory":[],"teamPoints":{"Mercedes":0,"Racing Bulls":0,"Williams":0,"Aston Martin":0,"Haas F1 Team":0,"Audi":0,"Ferrari":0,"Red Bull Racing":0,"Alpine":0,"McLaren":0,"Cadillac":0},"presence":{"Peppone":true,"Pelo":true,"Pando":true,"Pazz":true,"Mino":true,"Nicolino":true,"Cupo":true,"Mizzu":true},"sprintHistory":[],"pendingSprint":{"round":null,"results":[]}};
+let data = location.protocol === "file:"
+  ? JSON.parse(localStorage.getItem("nozzoLeague2027_2027_new_roster_v1") || JSON.stringify(base))
+  : JSON.parse(JSON.stringify(base));
+
+if(!data.presence){
+  data.presence = Object.fromEntries(leagueSubstitutions.map(s=>[s.human,true]));
+}
+if(!data.completedRounds){
+  data.completedRounds = data.calendar.filter(c=>c[2]==="Disputata").map(c=>Number(c[0]));
+}
+if(!data.pendingRace){
+  data.pendingRace = {round:null, results:[]};
+}
+if(!data.undoStack){
+  data.undoStack = [];
+}
+if(!data.raceHistory){
+  data.raceHistory = [];
+}
+
+if(
+  data.raceHistory.length===0 &&
+  data.race &&
+  data.race.name &&
+  data.race.name!=="Nessuna gara" &&
+  Array.isArray(data.race.results) &&
+  data.race.results.length &&
+  Number(data.race.completedRound)
+){
+  const reserveNames=new Set(leagueSubstitutions.map(s=>s.official));
+  data.raceHistory.push({
+    round:Number(data.race.completedRound),
+    name:data.race.name,
+    results:data.race.results.map(r=>({
+      position:Number(r[0]),
+      driver:r[1],
+      points:Number(r[4]||0),
+      substitute:reserveNames.has(r[1])
+    }))
+  });
+}
+
+if(!data.teamPoints){
+  data.teamPoints = {};
+  data.drivers.forEach(d=>{
+    data.teamPoints[d[1]] = (data.teamPoints[d[1]] || 0) + Number(d[2] || 0);
+  });
+}
+officialGrid.forEach(([name,team])=>{
+  if(!data.drivers.some(d=>d[0]===name)){
+    data.drivers.push([name,team,0]);
+  }
+});
+leagueSubstitutions.forEach(s=>{
+  if(!data.drivers.some(d=>d[0]===s.human)){
+    data.drivers.push([s.human,s.team,0]);
+  }
+});
+const logo=t=>`<span class="team-logo" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;background:#222;border-left:4px solid ${(teams[t]||"#777")};border-radius:4px;font-size:9px;font-weight:900;color:#fff;margin-right:8px">${t.split(" ").map(x=>x[0]).join("").slice(0,3)}</span>`;
+
+function enterLeague(){
+  const home=document.getElementById("homeScreen");
+  if(!home) return;
+  home.classList.add("hidden");
+  setTimeout(()=>{home.style.display="none";home.style.willChange="auto";},320);
+}
+
+
+const nozzoTracks2027 = [{"name": "Australia", "circuit": "Albert Park Grand Prix Circuit", "city": "Melbourne", "country": "Australia", "flag": "🇦🇺", "km": 5.278, "turns": 14, "laps": 58, "sprint": false}, {"name": "Cina", "circuit": "Shanghai International Circuit", "city": "Shanghai", "country": "Cina", "flag": "🇨🇳", "km": 5.451, "turns": 16, "laps": 56, "sprint": true}, {"name": "Giappone", "circuit": "Suzuka International Racing Course", "city": "Suzuka", "country": "Giappone", "flag": "🇯🇵", "km": 5.807, "turns": 18, "laps": 53, "sprint": false}, {"name": "Bahrain", "circuit": "Bahrain International Circuit", "city": "Sakhir", "country": "Bahrain", "flag": "🇧🇭", "km": 5.412, "turns": 15, "laps": 57, "sprint": false}, {"name": "Arabia Saudita", "circuit": "Jeddah Corniche Circuit", "city": "Gedda", "country": "Arabia Saudita", "flag": "🇸🇦", "km": 6.174, "turns": 27, "laps": 50, "sprint": false}, {"name": "Miami", "circuit": "Miami International Autodrome", "city": "Miami Gardens", "country": "Stati Uniti", "flag": "🇺🇸", "km": 5.412, "turns": 19, "laps": 57, "sprint": true}, {"name": "Canada", "circuit": "Circuit Gilles-Villeneuve", "city": "Montréal", "country": "Canada", "flag": "🇨🇦", "km": 4.361, "turns": 14, "laps": 70, "sprint": true}, {"name": "Monaco", "circuit": "Circuit de Monaco", "city": "Monte Carlo", "country": "Monaco", "flag": "🇲🇨", "km": 3.337, "turns": 19, "laps": 78, "sprint": false}, {"name": "Barcellona", "circuit": "Circuit de Barcelona-Catalunya", "city": "Montmeló", "country": "Spagna", "flag": "🇪🇸", "km": 4.657, "turns": 14, "laps": 66, "sprint": false}, {"name": "Austria", "circuit": "Red Bull Ring", "city": "Spielberg", "country": "Austria", "flag": "🇦🇹", "km": 4.318, "turns": 10, "laps": 71, "sprint": false}, {"name": "Gran Bretagna", "circuit": "Silverstone Circuit", "city": "Silverstone", "country": "Regno Unito", "flag": "🇬🇧", "km": 5.891, "turns": 18, "laps": 52, "sprint": true}, {"name": "Belgio", "circuit": "Circuit de Spa-Francorchamps", "city": "Stavelot", "country": "Belgio", "flag": "🇧🇪", "km": 7.004, "turns": 19, "laps": 44, "sprint": false}, {"name": "Ungheria", "circuit": "Hungaroring", "city": "Mogyoród", "country": "Ungheria", "flag": "🇭🇺", "km": 4.381, "turns": 14, "laps": 70, "sprint": false}, {"name": "Paesi Bassi", "circuit": "Circuit Zandvoort", "city": "Zandvoort", "country": "Paesi Bassi", "flag": "🇳🇱", "km": 4.259, "turns": 14, "laps": 72, "sprint": true}, {"name": "Monza", "circuit": "Autodromo Nazionale Monza", "city": "Monza", "country": "Italia", "flag": "🇮🇹", "km": 5.793, "turns": 11, "laps": 53, "sprint": false}, {"name": "Madrid", "circuit": "MADRING", "city": "Madrid", "country": "Spagna", "flag": "🇪🇸", "km": null, "turns": null, "laps": null, "sprint": false}, {"name": "Azerbaijan", "circuit": "Baku City Circuit", "city": "Baku", "country": "Azerbaijan", "flag": "🇦🇿", "km": 6.003, "turns": 20, "laps": 51, "sprint": false}, {"name": "Singapore", "circuit": "Marina Bay Street Circuit", "city": "Singapore", "country": "Singapore", "flag": "🇸🇬", "km": 4.94, "turns": 19, "laps": 62, "sprint": true}, {"name": "Austin", "circuit": "Circuit of The Americas", "city": "Austin", "country": "Stati Uniti", "flag": "🇺🇸", "km": 5.513, "turns": 20, "laps": 56, "sprint": false}, {"name": "Messico", "circuit": "Autódromo Hermanos Rodríguez", "city": "Città del Messico", "country": "Messico", "flag": "🇲🇽", "km": 4.304, "turns": 17, "laps": 71, "sprint": false}, {"name": "Brasile", "circuit": "Autódromo José Carlos Pace (Interlagos)", "city": "San Paolo", "country": "Brasile", "flag": "🇧🇷", "km": 4.309, "turns": 15, "laps": 71, "sprint": false}, {"name": "Las Vegas", "circuit": "Las Vegas Strip Circuit", "city": "Las Vegas", "country": "Stati Uniti", "flag": "🇺🇸", "km": 6.201, "turns": 17, "laps": 50, "sprint": false}, {"name": "Qatar", "circuit": "Lusail International Circuit", "city": "Lusail", "country": "Qatar", "flag": "🇶🇦", "km": 5.419, "turns": 16, "laps": 57, "sprint": false}, {"name": "Abu Dhabi", "circuit": "Yas Marina Circuit", "city": "Abu Dhabi", "country": "Emirati Arabi Uniti", "flag": "🇦🇪", "km": 5.281, "turns": 16, "laps": 58, "sprint": false}, {"name": "Imola", "circuit": "Autodromo Enzo e Dino Ferrari", "city": "Imola", "country": "Italia", "flag": "🇮🇹", "km": 4.909, "turns": 19, "laps": 63, "sprint": false}];
+function nozzoSyncCalendar(){
+ if(!Array.isArray(data.calendar)) data.calendar=[];
+ const old=new Map(data.calendar.map(c=>[Number(c[0]),c]));
+ data.calendar=nozzoTracks2027.map((t,i)=>{
+   const n=i+1, prev=old.get(n);
+   return [n,t.name,prev&&['Disputata','Prossima','In attesa'].includes(prev[2])?prev[2]:'In attesa'];
+ });
+ if(!data.calendar.some(c=>c[2]==='Prossima')){
+   const next=data.calendar.find(c=>c[2]!=='Disputata');if(next)next[2]='Prossima';
+ }
+}
+nozzoSyncCalendar();
+function nozzoCircuit(round){return nozzoTracks2027[Number(round)-1] || null;}
+
+const nzQualifyingRecords=[["1:15.096","Lando Norris","McLaren",2025],["1:30.641","Oscar Piastri","McLaren",2025],["1:26.983","Max Verstappen","Red Bull Racing",2025],["1:27.264","Lewis Hamilton","Mercedes",2020],["1:27.294","Max Verstappen","Red Bull Racing",2025],["1:26.204","Max Verstappen","Red Bull Racing",2025],["1:10.240","Sebastian Vettel","Ferrari",2019],["1:09.954","Lando Norris","McLaren",2025],["1:11.383","Lando Norris","McLaren",2024],["1:02.939","Valtteri Bottas","Mercedes",2020],["1:24.303","Lewis Hamilton","Mercedes",2020],["1:40.562","Lando Norris","McLaren",2025],["1:13.447","Lewis Hamilton","Mercedes",2020],["1:08.662","Oscar Piastri","McLaren",2025],["1:18.792","Max Verstappen","Red Bull Racing",2025],["1:31.824","Lando Norris","McLaren",2026],["1:40.203","Charles Leclerc","Ferrari",2023],["1:29.158","George Russell","Mercedes",2025],["1:32.029","Valtteri Bottas","Mercedes",2019],["1:14.758","Max Verstappen","Red Bull Racing",2019],["1:07.281","Lewis Hamilton","Mercedes",2018],["1:32.312","George Russell","Mercedes",2024],["1:19.387","Oscar Piastri","McLaren",2025],["1:22.109","Max Verstappen","Red Bull Racing",2021],["1:13.609","Valtteri Bottas","Mercedes",2020]];
+function nzRecordCard(round){const r=nzQualifyingRecords[Number(round)-1];return r?`<div class="nz-qual-card"><div class="nz-qual-label">RECORD ASSOLUTO · QUALIFICHE F1</div><div class="nz-qual-time">${r[0]}</div><div class="nz-qual-driver">${r[1]}</div><div class="nz-qual-team">${r[2]} · ${r[3]}</div></div>`:"";}
+function nozzoCircuitDetails(round){
+ const t=nozzoCircuit(round); if(!t)return;
+ const c=data.calendar.find(r=>Number(r[0])===Number(round));
+ const stat=(label,value)=>`<div class="nc-stat"><small>${label}</small><b>${value ?? 'Da confermare'}</b></div>`;
+ document.getElementById('ncTitle').textContent=`${t.flag} ${t.country.toUpperCase()} — ${t.name.toUpperCase()}`;
+ document.getElementById('ncDetails').innerHTML=`
+  <div class="nc-circuit-name">${t.circuit}</div>
+  <div class="nc-location">📍 ${t.city} · ${t.country}</div>
+  ${t.sprint?'<span class="nc-sprint">SPRINT</span>':''}
+  ${nozzoTrackShape(round)}
+  <div class="nc-stats">${stat('Lunghezza',t.km ? t.km.toLocaleString('it-IT',{minimumFractionDigits:3})+' km':null)}${stat('Curve',t.turns)}${stat('Giri GP · 50%',t.laps ? Math.ceil(t.laps/2) : null)}${stat('Distanza GP · 50%',t.km&&t.laps?(t.km*Math.ceil(t.laps/2)).toLocaleString('it-IT',{minimumFractionDigits:1,maximumFractionDigits:1})+' km':null)}</div>
+  <p class="nc-note">Giri e distanza calcolati per gara al 50% (arrotondamento per eccesso). Le caratteristiche del tracciato possono variare nel gioco.</p>
+  ${nzRecordCard(round)}
+  ${nzSprintDetails(round)}
+  ${c&&c[2]==='Disputata'?`<button class="nc-results" onclick="nozzoCloseCircuit();openRaceHistory(${Number(round)})">VEDI RISULTATI GP</button>`:''}
+ `;
+ const modal=document.getElementById('ncModal'); if(!modal){alert('Scheda circuito non disponibile');return;} document.body.appendChild(modal);modal.classList.add('open');modal.style.setProperty('display','flex','important');
+}
+function nozzoCloseCircuit(){const m=document.getElementById('ncModal');if(m){m.classList.remove('open');m.style.removeProperty('display');}}
+document.addEventListener('click',function(e){const row=e.target.closest('[data-circuit-round]');if(row && !row.hasAttribute('onclick'))nozzoCircuitDetails(row.dataset.circuitRound);});
+document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-circuit-round]')){e.preventDefault();nozzoCircuitDetails(e.target.dataset.circuitRound);}});
+
+
+// Geometrie reali da GeoJSON (SergioSediq/f1-circuits, MIT).
+// Sono caricate via HTTPS; non utilizziamo sagome inventate come fallback.
+const nzGeoURL='https://raw.githubusercontent.com/SergioSediq/f1-circuits/main/f1-circuits.geojson';
+const nzTrackLocations=['Melbourne','Shanghai','Suzuka','Sakhir','Jeddah','Miami','Montreal','Monaco','Barcelona','Spielberg','Silverstone','Spa-Francorchamps','Budapest','Zandvoort','Monza','Madrid','Baku','Singapore','Austin','Mexico City','Sao Paulo','Las Vegas','Lusail','Yas Marina','Imola'];
+let nzGeoPromise=null;
+function nzGeoFeatures(){
+ if(!nzGeoPromise)nzGeoPromise=fetch(nzGeoURL).then(r=>{if(!r.ok)throw new Error('Dati tracciati non disponibili');return r.json()}).then(j=>j.features||[]).catch(e=>{nzGeoPromise=null;throw e});
+ return nzGeoPromise;
+}
+function nzCircuitCoords(feature){
+ const g=feature?.geometry;if(!g)return null;
+ if(g.type==='LineString')return g.coordinates;
+ if(g.type==='MultiLineString')return g.coordinates.reduce((a,b)=>b.length>a.length?b:a,[]);
+ return null;
+}
+
+// Sagome PNG locali fornite dalla lega, disponibili anche offline.
+const nzLocalTrackFiles=['melbourne','shanghai','suzuka','sakhir','jeddah','miami','montreal','monaco','catalunya','spielberg','silverstone','spa','hungaroring','zandvoort','monza','madrid','baku','singapore','austin','mexico','interlagos','las-vegas','lusail','yas-marina','imola'];
+function nozzoTrackShape(round){
+ const slug=nzLocalTrackFiles[Number(round)-1];
+ if(!slug)return '<div class="nz-track-caption">Tracciato non disponibile</div>';
+ return `<div class="nz-track-art nz-real-art nz-upload-art"><img src="assets/tracks/${slug}.png" alt="Sagoma del circuito ${slug}" loading="eager" style="max-width:100%;max-height:100%;object-fit:contain"></div><div class="nz-track-caption">Tracciato · immagine fornita dalla lega</div>`;
+}
+function nzSprintDetails(round){
+ const t=nozzoCircuit(round); if(!t?.sprint)return '';
+ const entry=(data.sprintHistory||[]).find(h=>Number(h.round)===Number(round));
+ if(!entry)return '<div class="nz-sprint-status">Sprint prevista · risultati non ancora inseriti</div>';
+ return `<div class="nz-sprint-status"><b>🏁 Risultati Sprint</b></div><table class="nz-sprint-table"><thead><tr><th>Pos.</th><th>Pilota</th><th>Punti</th></tr></thead><tbody>${entry.results.map(r=>`<tr><td>${r.position}</td><td>${r.driver}</td><td>${r.points}</td></tr>`).join('')}</tbody></table>`;
+}
+const nzSprintPoints=[8,7,6,5,4,3,2,1];
+function nzSprintInit(){
+ data.sprintHistory ||= [];
+ data.sprintUndo ||= [];
+ data.pendingSprint ||= {round:null,results:[]};
+}
+function nzSprintEditor(){
+ nzSprintInit();
+ const el=document.getElementById('nzSprintEditor');if(!el)return;
+ const race=currentNextRace();
+ if(!race){el.innerHTML='';return;}
+ const round=Number(race[0]);const t=nozzoCircuit(round);
+ if(!t?.sprint){el.innerHTML='';return;}
+ const saved=data.sprintHistory.find(x=>Number(x.round)===round);
+ if(data.pendingSprint.round!==round || !Array.isArray(data.pendingSprint.results) || data.pendingSprint.results.length!==22){
+   data.pendingSprint={round,results:Array(22).fill('')};
+ }
+ const grid=activeRaceGrid();const allowed=new Set(grid.map(r=>r[0]));
+ data.pendingSprint.results=data.pendingSprint.results.map(n=>allowed.has(n)?n:'');
+ const opts=(selected)=>'<option value="">— Seleziona —</option>'+grid.map(([name])=>`<option value="${name}" ${name===selected?'selected':''} ${data.pendingSprint.results.includes(name)&&name!==selected?'disabled':''}>${name}</option>`).join('');
+ el.innerHTML=`<h3>⚡ Sprint — ${race[1]}</h3><div class="nz-sub">22 piloti · punti ai primi 8 (8–7–6–5–4–3–2–1). La Sprint non vale come GP o podio GP.</div>`+
+ (saved?`<div class="nz-sprint-status">✓ Sprint registrata · ${saved.results[0]?.driver||''} vincitore</div><div class="nz-sprint-actions"><button onclick="nzUndoSprint()">↩ Annulla Sprint</button></div>`:
+ `<div class="nz-sprint-status">Registra prima la Sprint, poi il GP.</div><table class="nz-sprint-table"><thead><tr><th>Pos.</th><th>Pilota</th><th>Pt.</th></tr></thead><tbody>${data.pendingSprint.results.map((name,i)=>`<tr><td>${i+1}°</td><td><select onchange="nzSelectSprint(${i},this.value)">${opts(name)}</select></td><td>${nzSprintPoints[i]||'—'}</td></tr>`).join('')}</tbody></table><div class="nz-sprint-actions"><button onclick="nzCompleteSprint()">⚡ Registra Sprint</button></div>`);
+}
+function nzSelectSprint(i,name){data.pendingSprint.results[i]=name;nzSprintEditor();}
+function nzCompleteSprint(){
+ nzSprintInit();const race=currentNextRace();if(!race||!nozzoCircuit(race[0])?.sprint)return;
+ const round=Number(race[0]);if(data.sprintHistory.some(x=>Number(x.round)===round))return;
+ const names=data.pendingSprint.results;
+ if(names.length!==22||names.some(n=>!n)||new Set(names).size!==22){alert('Seleziona 22 piloti diversi per la Sprint.');return;}
+ const map=Object.fromEntries(activeRaceGrid());if(names.some(n=>!map[n])){alert('La griglia Sprint non è valida.');return;}
+ if(!confirm('Registrare la Sprint di '+race[1]+' e assegnare i punti?'))return;
+ const snapshot={drivers:structuredClone(data.drivers),teamPoints:structuredClone(data.teamPoints),sprintHistory:structuredClone(data.sprintHistory),pendingSprint:structuredClone(data.pendingSprint)};
+ data.sprintUndo.push(snapshot);
+ const results=names.map((driver,i)=>({position:i+1,driver,team:map[driver],points:nzSprintPoints[i]||0}));
+ results.forEach(r=>{if(!r.points)return;data.teamPoints[r.team]=Number(data.teamPoints[r.team]||0)+r.points;
+ let d=data.drivers.find(x=>x[0]===r.driver);if(!d){d=[r.driver,r.team,0];data.drivers.push(d);}d[1]=r.team;d[2]=Number(d[2]||0)+r.points;});
+ data.sprintHistory.push({round,name:race[1],results});
+ data.lastUpdated=new Date().toLocaleString('it-IT');localStorage.setItem('nozzoLeague2027_2027_new_roster_v1',JSON.stringify(data));render();buildEditors();
+ alert('Sprint registrata. Punti piloti e costruttori aggiornati.');
+}
+function nzUndoSprint(){
+ nzSprintInit();const race=currentNextRace();if(!race)return;
+ const round=Number(race[0]);const idx=data.sprintHistory.findIndex(h=>Number(h.round)===round);
+ if(idx<0)return;
+ if(!confirm('Annullare la Sprint di '+race[1]+' e rimuovere i punti assegnati?'))return;
+ const history=data.sprintHistory[idx];
+ history.results.forEach(r=>{if(!r.points)return;const d=data.drivers.find(x=>x[0]===r.driver);if(d)d[2]=Number(d[2]||0)-r.points;data.teamPoints[r.team]=Number(data.teamPoints[r.team]||0)-r.points;});
+ data.sprintHistory.splice(idx,1);data.pendingSprint={round,results:history.results.map(r=>r.driver)};
+ data.lastUpdated=new Date().toLocaleString('it-IT');localStorage.setItem('nozzoLeague2027_2027_new_roster_v1',JSON.stringify(data));render();buildEditors();
+}
+function render(){
+ const visibleDrivers = [...data.drivers]
+   .sort((a,b)=>Number(b[2])-Number(a[2]) || a[0].localeCompare(b[0]));
+
+ driversTable.innerHTML=`<thead><tr><th>Pos</th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead><tbody>`+
+ visibleDrivers.map((d,i)=>{
+   const isReserve=leagueSubstitutions.some(s=>s.official===d[0]);
+   return `<tr><td class="pos">${i+1}</td><td><b>${d[0]}${isReserve?"*":""}</b></td><td><span class="team">${logo(d[1])}${d[1]}</span></td><td class="points">${d[2]}</td></tr>`;
+ }).join("")+"</tbody>"+
+ `<tfoot><tr><td colspan="4" style="padding:10px 12px;color:var(--muted);font-size:11px;border-top:1px solid #242729">* Pilota ufficiale di riserva.</td></tr></tfoot>`;
+
+ const teamRows = Object.entries(data.teamPoints || {})
+   .sort((a,b)=>Number(b[1])-Number(a[1]) || a[0].localeCompare(b[0]));
+
+ teamsTable.innerHTML=`<thead><tr><th>Pos</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead><tbody>`+
+ teamRows.map((t,i)=>`<tr><td class="pos">${i+1}</td><td>${logo(t[0])}<b>${t[0]}</b></td><td class="points">${t[1]}</td></tr>`).join("")+"</tbody>";
+
+ calendarTable.innerHTML=`<thead><tr><th>Round</th><th>Paese · Tracciato</th><th>Stato</th></tr></thead><tbody>`+
+ data.calendar.map(c=>{
+   const t=nozzoCircuit(c[0]);
+   return `<tr class="nc-clickable" data-circuit-round="${Number(c[0])}" onclick="nozzoCircuitDetails(${Number(c[0])})" tabindex="0" role="button" aria-label="Apri informazioni circuito"><td class="pos">${c[0]}</td><td><div class="nc-gp">${t?t.flag+' ':''}${t?t.country+' - '+t.city:c[1]}</div>${t&&t.sprint?'<span class="nc-sprint">SPRINT</span>':''}</td><td class="${c[2]==='Disputata'?'done':c[2]==='Prossima'?'next-state':'wait'}"><span class="dot"></span>${c[2]}</td></tr>`;
+ }).join("")+"</tbody>";
+
+ const next=data.calendar.find(c=>c[2]==="Prossima")||data.calendar.find(c=>c[2]==="In attesa");
+ nlUpdateNextBanner();
+
+ lastGp.textContent=data.race.name.toUpperCase();
+ lastUpdated.textContent="Ultimo aggiornamento: "+(data.lastUpdated||"—");
+
+ const sorted=[...(data.race.results||[])].sort((a,b)=>a[0]-b[0]);
+ if(!sorted.length){
+   resultsGrid.innerHTML=`<div class="empty" style="grid-column:1/-1;padding:30px;text-align:center;color:var(--muted)">Nessun risultato inserito.</div>`;
+   return;
+ }
+
+ const mid=Math.ceil(sorted.length/2);
+ const chunks=[sorted.slice(0,mid),sorted.slice(mid)];
+ resultsGrid.innerHTML=chunks.map(chunk=>`<table><thead><tr><th>Pos</th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead><tbody>${chunk.map(r=>`<tr><td class="pos">${r[0]}</td><td><b>${r[1]}</b></td><td>${logo(r[2])}${r[2]}</td><td class="points">${r[4]}</td></tr>`).join("")}</tbody></table>`).join("");
+}
+function openEditor(){buildEditors();modal.classList.add("open")}
+function closeEditor(){modal.classList.remove("open")}
+function showTab(n,b){document.querySelectorAll(".edit-panel").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.getElementById("edit-"+n).classList.add("active");b.classList.add("active")}
+function teamOptions(s){return Object.keys(teams).map(t=>`<option ${t===s?"selected":""}>${t}</option>`).join("")}
+function buildEditors(){
+ driversEdit.innerHTML=`<thead><tr><th>Pilota</th><th>Scuderia</th><th>Punti</th></tr></thead><tbody>`+data.drivers.map((d,i)=>`<tr><td><input data-d="${i}" data-k="0" value="${d[0]}"></td><td><select data-d="${i}" data-k="1">${teamOptions(d[1])}</select></td><td><input type="number" min="0" data-d="${i}" data-k="2" value="${d[2]}"></td></tr>`).join("")+"</tbody>";
+ calendarEdit.innerHTML=`<thead><tr><th>Round</th><th>GP</th><th>Stato</th></tr></thead><tbody>`+data.calendar.map((c,i)=>`<tr><td><input type="number" data-c="${i}" data-k="0" value="${c[0]}"></td><td><input data-c="${i}" data-k="1" value="${c[1]}"></td><td><select data-c="${i}" data-k="2">${["In attesa","Prossima","Disputata"].map(s=>`<option ${s===c[2]?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join("")+"</tbody>";
+ buildPresenceEditor();buildRaceEditor();nzSprintEditor()
+}
+
+function nlUpdateNextBanner(){
+ const banner=document.getElementById('nlNextBanner');if(!banner)return;
+ const next=currentNextRace();if(!next){banner.hidden=true;banner.style.display='none';return;}
+ banner.hidden=false;banner.style.removeProperty('display');
+ const round=Number(next[0]),track=nozzoCircuit(round);
+ document.getElementById('nlNextCountry').textContent=(track?.country||next[1]).toUpperCase();
+ document.getElementById('nlNextCity').textContent=(track?.city||'').toUpperCase();
+ document.getElementById('nlNextCircuit').textContent=(track?.circuit||'').toUpperCase();
+ const img=document.getElementById('nlNextTrackImg');const slug=nzLocalTrackFiles[round-1];
+ img.hidden=!slug;if(slug)img.src='assets/tracks/'+slug+'.png';
+ banner.setAttribute('aria-label','Informazioni circuito: '+(track?.country||next[1])+' — '+(track?.city||''));
+}
+function nlOpenNextCircuit(){const next=currentNextRace();if(next)nozzoCircuitDetails(Number(next[0]));}
+function currentNextRace(){
+  return data.calendar.find(c=>c[2]==="Prossima") ||
+         data.calendar.find(c=>c[2]==="In attesa") ||
+         null;
+}
+
+function activeRaceGrid(){
+  return officialGrid.map(([official,team])=>{
+    const replacement = leagueSubstitutions.find(s=>s.official===official);
+    if(replacement && data.presence[replacement.human]){
+      return [replacement.human, replacement.team];
+    }
+    return [official, team];
+  });
+}
+
+function ensurePendingRace(){
+  const next = currentNextRace();
+  if(!next) return;
+
+  const grid = activeRaceGrid();
+  if(data.pendingRace.round !== Number(next[0]) || data.pendingRace.results.length !== 22){
+    data.pendingRace = {
+      round:Number(next[0]),
+      results:grid.map((d,i)=>[i+1,"","","",0])
+    };
+  }
+
+  const allowed = new Set(grid.map(d=>d[0]));
+  data.pendingRace.results.forEach((r,i)=>{
+    r[0]=i+1;
+    if(r[1] && !allowed.has(r[1])){
+      data.pendingRace.results[i]=[i+1,"","","",0];
+    }
+  });
+}
+
+function buildPresenceEditor(){
+  presenceGrid.innerHTML = leagueSubstitutions.map(s=>`
+    <label class="presence-item">
+      <input type="checkbox"
+        ${data.presence[s.human] ? "checked" : ""}
+        onchange="togglePresence('${s.human}',this.checked)">
+      <span><b>${s.human}</b><small>${s.team} · sostituisce ${s.official}</small></span>
+    </label>
+  `).join("");
+}
+
+function togglePresence(human,isPresent){
+  nzSprintInit(); const r=currentNextRace();if(r && data.sprintHistory.some(h=>Number(h.round)===Number(r[0]))){alert("Sprint già registrata: annullala prima di cambiare le presenze.");buildPresenceEditor();return;}
+  data.presence[human]=isPresent;
+  const next = currentNextRace();
+  if(next){
+    data.pendingRace={round:Number(next[0]),results:activeRaceGrid().map((d,i)=>[i+1,"","","",0])};
+  }
+  buildPresenceEditor();
+  buildRaceEditor();nzSprintEditor();
+}
+
+function driverOptions(selectedName,rowIndex){
+  const grid = activeRaceGrid();
+  const used = new Set(
+    data.pendingRace.results
+      .map((r,i)=>i===rowIndex ? "" : (r[1]||"").trim())
+      .filter(Boolean)
+  );
+
+  return `<option value="">— Seleziona pilota —</option>` +
+    grid.map(([name])=>{
+      const disabled = used.has(name) && name!==selectedName;
+      return `<option value="${name}" ${name===selectedName?"selected":""} ${disabled?"disabled":""}>${name}</option>`;
+    }).join("");
+}
+
+function buildRaceEditor(){
+  ensurePendingRace();
+
+  if(!currentNextRace()){
+    raceEdit.innerHTML=`<tbody><tr><td class="empty">Campionato concluso.</td></tr></tbody>`;
+    return;
+  }
+
+  const gridMap = Object.fromEntries(activeRaceGrid());
+  raceEdit.innerHTML =
+    `<thead><tr><th>Posizione</th><th>Pilota</th><th>Scuderia</th></tr></thead><tbody>` +
+    data.pendingRace.results.map((r,i)=>`
+      <tr>
+        <td><b>${i+1}°</b></td>
+        <td>
+          <select class="result-select" onchange="onDriverSelect(${i},this.value)">
+            ${driverOptions(r[1]||"",i)}
+          </select>
+        </td>
+        <td>${r[1] ? (gridMap[r[1]] || "") : ""}</td>
+      </tr>`).join("") +
+    `</tbody>`;
+}
+
+function onDriverSelect(index,driverName){
+  const gridMap = Object.fromEntries(activeRaceGrid());
+  data.pendingRace.results[index]=[
+    index+1,
+    driverName,
+    driverName ? (gridMap[driverName] || "") : "",
+    "",
+    0
+  ];
+  buildRaceEditor();
+}
+
+const racePoints=[25,18,15,12,10,8,6,4,2,1];
+
+function completeGrandPrix(){
+  const currentRace=currentNextRace();
+  if(!currentRace){
+    alert("Non è presente nessun GP da disputare.");
+    return;
+  }
+
+  ensurePendingRace();
+  nzSprintInit();
+  if(nozzoCircuit(currentRace[0])?.sprint && !data.sprintHistory.some(h=>Number(h.round)===Number(currentRace[0]))){alert('Registra prima i risultati della Sprint.');return;}
+
+  if(data.completedRounds.includes(Number(currentRace[0]))){
+    alert("Questo GP risulta già concluso.");
+    return;
+  }
+
+  const results=data.pendingRace.results.map((r,i)=>[
+    i+1,(r[1]||"").trim(),r[2]||"","",0
+  ]);
+
+  if(results.some(r=>!r[1])){
+    alert("Seleziona tutti i 22 piloti nell’ordine d’arrivo.");
+    return;
+  }
+
+  const names=results.map(r=>r[1]);
+  if(new Set(names).size!==22){
+    alert("Ogni pilota può essere selezionato una sola volta.");
+    return;
+  }
+
+  if(!confirm("Concludere il GP "+currentRace[1]+" e aggiornare automaticamente le classifiche?")){
+    return;
+  }
+
+  const snapshot = {
+    drivers: JSON.parse(JSON.stringify(data.drivers)),
+    calendar: JSON.parse(JSON.stringify(data.calendar)),
+    race: JSON.parse(JSON.stringify(data.race)),
+    presence: JSON.parse(JSON.stringify(data.presence)),
+    pendingRace: JSON.parse(JSON.stringify(data.pendingRace)),
+    completedRounds: JSON.parse(JSON.stringify(data.completedRounds)),
+    teamPoints: JSON.parse(JSON.stringify(data.teamPoints || {})),
+    raceHistory: JSON.parse(JSON.stringify(data.raceHistory || [])),
+    sprintHistory: JSON.parse(JSON.stringify(data.sprintHistory || [])),
+    pendingSprint: JSON.parse(JSON.stringify(data.pendingSprint || {round:null,results:[]})),
+    lastUpdated: data.lastUpdated || ""
+  };
+  data.undoStack.push(snapshot);
+
+  results.forEach((result,index)=>{
+    result[4]=racePoints[index]||0;
+
+    // Constructor points always follow the car/team.
+    data.teamPoints[result[2]] =
+      Number(data.teamPoints[result[2]] || 0) + Number(result[4] || 0);
+
+    // I punti pilota vanno a chi ha effettivamente corso.
+    // Se l'umano è assente, la riserva ufficiale prende punti a proprio nome.
+    let driver=data.drivers.find(d=>d[0]===result[1]);
+    if(!driver){
+      driver=[result[1],result[2],0];
+      data.drivers.push(driver);
+    }
+    driver[1]=result[2];
+    driver[2]=Number(driver[2]||0)+Number(result[4]||0);
+  });
+
+  data.race={
+    name:currentRace[1],
+    results:results,
+    completedRound:Number(currentRace[0])
+  };
+
+  const replacedOfficials = new Set(leagueSubstitutions.map(s=>s.official));
+  data.raceHistory = data.raceHistory.filter(h=>Number(h.round)!==Number(currentRace[0]));
+  data.raceHistory.push({
+    round:Number(currentRace[0]),
+    name:currentRace[1],
+    results:results.map(r=>({
+      position:Number(r[0]),
+      driver:r[1],
+      points:Number(r[4]||0),
+      substitute:replacedOfficials.has(r[1])
+    }))
+  });
+
+  currentRace[2]="Disputata";
+  data.completedRounds.push(Number(currentRace[0]));
+
+  const index=data.calendar.indexOf(currentRace);
+  const next=data.calendar.slice(index+1).find(c=>c[2]!=="Disputata");
+  if(next) next[2]="Prossima";
+
+  data.pendingRace={round:null,results:[]};
+  data.lastUpdated=new Date().toLocaleString("it-IT",{
+    day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"
+  });
+
+  localStorage.setItem("nozzoLeague2027_2027_new_roster_v1",JSON.stringify(data));
+  render();
+  closeEditor();
+  alert("GP concluso. Classifiche e calendario aggiornati.");
+}
+
+
+function undoLastGrandPrix(){
+  if(!data.undoStack || !data.undoStack.length){
+    alert("Non c'è nessun GP da annullare.");
+    return;
+  }
+
+  const lastRaceName = data.race && data.race.name ? data.race.name : "l'ultimo GP";
+
+  if(!confirm("Vuoi davvero annullare " + lastRaceName + "?")){
+    return;
+  }
+
+  const snapshot = data.undoStack.pop();
+
+  data.drivers = snapshot.drivers;
+  data.calendar = snapshot.calendar;
+  data.race = snapshot.race;
+  data.presence = snapshot.presence;
+  data.pendingRace = snapshot.pendingRace;
+  data.completedRounds = snapshot.completedRounds;
+  data.teamPoints = snapshot.teamPoints || {};
+  data.raceHistory = snapshot.raceHistory || [];
+  data.sprintHistory = snapshot.sprintHistory || [];
+  data.pendingSprint = snapshot.pendingSprint || {round:null,results:[]};
+  data.lastUpdated = new Date().toLocaleString("it-IT",{
+    day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"
+  });
+
+  localStorage.setItem("nozzoLeague2027_2027_new_roster_v1",JSON.stringify(data));
+  render();
+  closeEditor();
+  alert("Ultimo GP annullato. Puoi correggere l'ordine d'arrivo e concluderlo di nuovo.");
+}
+
+
+function openRaceHistory(round){
+  let race=(data.raceHistory||[]).find(h=>Number(h.round)===Number(round));
+
+  if(
+    !race &&
+    data.race &&
+    Number(data.race.completedRound)===Number(round) &&
+    Array.isArray(data.race.results) &&
+    data.race.results.length
+  ){
+    const reserveNames=new Set(leagueSubstitutions.map(s=>s.official));
+    race={
+      round:Number(round),
+      name:data.race.name,
+      results:data.race.results.map(r=>({
+        position:Number(r[0]),
+        driver:r[1],
+        points:Number(r[4]||0),
+        substitute:reserveNames.has(r[1])
+      }))
+    };
+  }
+
+  if(!race) return;
+
+  const modal=document.getElementById("historyModal");
+  const title=document.getElementById("historyTitle");
+  const content=document.getElementById("historyContent");
+  if(!modal || !title || !content) return;
+
+  title.textContent="🏁 GP "+String(race.name||"").toUpperCase();
+
+  const rows=[...(race.results||[])].sort((a,b)=>Number(a.position)-Number(b.position));
+  const hasReserve=rows.some(r=>r.substitute);
+
+  const sprint=(data.sprintHistory||[]).find(h=>Number(h.round)===Number(round));
+  content.innerHTML=`
+    ${sprint?`<div class="nz-sprint-status"><b>⚡ SPRINT</b></div><table class="history-table"><thead><tr><th>Pos</th><th>Pilota</th><th>Punti</th></tr></thead><tbody>${sprint.results.map(r=>`<tr><td>${r.position}</td><td>${r.driver}</td><td>${r.points}</td></tr>`).join('')}</tbody></table><div class="nz-sprint-status"><b>🏁 GARA</b></div>`:''}
+    <table class="history-table">
+      <thead>
+        <tr><th>Pos</th><th>Pilota</th><th style="text-align:right">Punti</th></tr>
+      </thead>
+      <tbody>
+        ${rows.map(r=>`
+          <tr class="${Number(r.position)===1?"podium-1":Number(r.position)===2?"podium-2":Number(r.position)===3?"podium-3":""}">
+            <td class="pos">${r.position}</td>
+            <td><b>${r.driver}${r.substitute?"*":""}</b></td>
+            <td class="points">${r.points}</td>
+          </tr>`).join("")}
+      </tbody>
+    </table>
+    ${hasReserve?`<div class="history-note">* Pilota ufficiale di riserva.</div>`:""}
+  `;
+
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden","false");
+}
+
+function closeHistory(){
+  const modal=document.getElementById("historyModal");
+  if(!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden","true");
+}
+
+document.addEventListener("click",event=>{
+  const modal=document.getElementById("historyModal");
+  if(modal && event.target===modal) closeHistory();
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape") closeHistory();
+});
+
+document.addEventListener("click",event=>{
+  const row=event.target.closest("tr[data-history-round]");
+  if(!row) return;
+  const round=Number(row.dataset.historyRound);
+  if(round) openRaceHistory(round);
+});
+
+
+/* === DRIVER PROFILE MODULE — 8 PILOTI UMANI === */
+const HUMAN_DRIVER_PROFILES = {
+  "Peppone": {name:"Peppone",team:"Racing Bulls",teamLabel:"RACING BULLS",reserve:"Liam Lawson",number:"30",photo:"assets/drivers/peppone.png",photoY:"22%",logo:"assets/teams/racing-bulls.svg",accent:"#6692ff"},
+  "Pelo": {name:"Pelo",team:"Racing Bulls",teamLabel:"RACING BULLS",reserve:"Arvid Lindblad",number:"41",photo:"assets/drivers/pelo.png",photoY:"22%",logo:"assets/teams/racing-bulls.svg",accent:"#6692ff"},
+  "Pando": {name:"Pando",team:"Cadillac",teamLabel:"CADILLAC FORMULA 1 TEAM",reserve:"Valtteri Bottas",number:"77",photo:"assets/drivers/pando.png",photoY:"22%",logo:"assets/teams/cadillac.svg",accent:"#d2d2d2"},
+  "Pazz": {name:"Pazz",team:"Cadillac",teamLabel:"CADILLAC FORMULA 1 TEAM",reserve:"Sergio Perez",number:"11",photo:"assets/drivers/pazz.png",photoY:"22%",logo:"assets/teams/cadillac.svg",accent:"#d2d2d2"},
+  "Mino": {name:"Mino",team:"Audi",teamLabel:"AUDI REVOLUT F1 TEAM",reserve:"Gabriel Bortoleto",number:"5",photo:"assets/drivers/mino.png",photoY:"22%",logo:"assets/teams/audi.svg",accent:"#c9002b"},
+  "Nicolino": {name:"Nicolino",team:"Audi",teamLabel:"AUDI REVOLUT F1 TEAM",reserve:"Nico Hulkenberg",number:"27",photo:"assets/drivers/nicolino.png",photoY:"22%",logo:"assets/teams/audi.svg",accent:"#c9002b"},
+  "Cupo": {name:"Cupo",team:"Haas F1 Team",teamLabel:"HAAS F1 TEAM",reserve:"Oliver Bearman",number:"87",photo:"assets/drivers/cupo.png",photoY:"22%",logo:"assets/teams/haas.svg",accent:"#b6babd"},
+  "Mizzu": {name:"Mizzu",team:"Haas F1 Team",teamLabel:"HAAS F1 TEAM",reserve:"Esteban Ocon",number:"31",photo:"assets/drivers/mizzu.png",photoY:"22%",logo:"assets/teams/haas.svg",accent:"#b6babd"},
+};
+
+function getHumanDriverSeasonStats(driverName){
+  const standings=[...(data.drivers||[])]
+    .sort((a,b)=>Number(b[2])-Number(a[2]) || a[0].localeCompare(b[0]));
+
+  const driverRow=standings.find(d=>d[0]===driverName);
+  const standingIndex=standings.findIndex(d=>d[0]===driverName);
+
+  const races=(data.raceHistory||[])
+    .map(h=>{
+      const result=(h.results||[]).find(r=>r.driver===driverName);
+      return result ? {
+        round:Number(h.round),
+        name:h.name,
+        position:Number(result.position),
+        points:Number(result.points||0)
+      } : null;
+    })
+    .filter(Boolean)
+    .sort((a,b)=>a.round-b.round);
+
+  const positions=races.map(r=>r.position);
+
+  return {
+    position:standingIndex>=0 ? standingIndex+1 : null,
+    points:driverRow ? Number(driverRow[2]||0) : 0,
+    races:races.length,
+    wins:positions.filter(p=>p===1).length,
+    podiums:positions.filter(p=>p<=3).length,
+    top5:positions.filter(p=>p<=5).length,
+    best:positions.length ? Math.min(...positions) : null,
+    avg:positions.length ? positions.reduce((a,b)=>a+b,0)/positions.length : null,
+    recent:races.slice(-5).reverse()
+  };
+}
+
+function openDriverProfile(driverName){
+  const profile=HUMAN_DRIVER_PROFILES[driverName];
+  if(!profile) return;
+
+  const stats=getHumanDriverSeasonStats(driverName);
+  const modal=document.getElementById("driverProfileModal");
+  const card=document.getElementById("driverProfileCard");
+  const hero=document.getElementById("driverProfileHero");
+  if(!modal || !card || !hero) return;
+
+  card.style.setProperty("--driver-accent",profile.accent);
+  hero.style.setProperty("--driver-photo",`url("${profile.photo}")`);
+  hero.style.setProperty("--driver-photo-y",profile.photoY||"22%");
+  hero.dataset.number=profile.number;
+
+  const logo=document.getElementById("driverProfileTeamLogo");
+  logo.src=profile.logo;
+  logo.alt=profile.teamLabel;
+
+  document.getElementById("driverProfileTeamName").textContent=profile.teamLabel;
+  document.getElementById("driverProfileName").textContent=profile.name.toUpperCase();
+  document.getElementById("driverProfileNumber").textContent="#"+profile.number;
+  document.getElementById("driverProfileSub").textContent="Sostituisce "+profile.reserve;
+
+  document.getElementById("driverProfileStats").innerHTML=`
+    <div class="driver-stat"><small>Posizione</small><strong class="accent">${stats.position ? stats.position+"°" : "—"}</strong></div>
+    <div class="driver-stat"><small>Punti</small><strong>${stats.points}</strong></div>
+    <div class="driver-stat"><small>GP disputati</small><strong>${stats.races}</strong></div>
+    <div class="driver-stat"><small>Vittorie</small><strong>${stats.wins}</strong></div>
+    <div class="driver-stat"><small>Podi</small><strong>${stats.podiums}</strong></div>
+    <div class="driver-stat"><small>Top 5</small><strong>${stats.top5}</strong></div>
+    <div class="driver-stat"><small>Miglior risultato</small><strong>${stats.best ? stats.best+"°" : "—"}</strong></div>
+    <div class="driver-stat"><small>Posizione media</small><strong>${stats.avg ? stats.avg.toFixed(1).replace(".",",") : "—"}</strong></div>
+  `;
+
+  document.getElementById("driverProfileRecent").innerHTML=stats.recent.length
+    ? stats.recent.map(r=>`
+        <div class="driver-race-row">
+          <div class="driver-race-name">${String(r.name||"").toUpperCase()}</div>
+          <div class="driver-race-pos ${r.position===1?"win":""}">${r.position}°</div>
+          <div class="driver-race-pts">${r.points} PUNTI</div>
+        </div>`).join("")
+    : `<div class="driver-empty">Nessun GP disputato da ${profile.name}.</div>`;
+
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden","false");
+}
+
+function closeDriverProfile(){
+  const modal=document.getElementById("driverProfileModal");
+  if(!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden","true");
+}
+
+function enhanceHumanDriverLinks(){
+  const humanNames=new Set(Object.keys(HUMAN_DRIVER_PROFILES));
+
+  document.querySelectorAll("td b").forEach(el=>{
+    const raw=el.textContent.trim().replace(/\*$/,"");
+    if(!humanNames.has(raw) || el.dataset.driverProfileReady==="1") return;
+
+    el.dataset.driverProfileReady="1";
+    el.classList.add("human-driver-link");
+    el.addEventListener("click",event=>{
+      event.stopPropagation();
+      openDriverProfile(raw);
+    });
+  });
+}
+
+document.addEventListener("click",event=>{
+  const modal=document.getElementById("driverProfileModal");
+  if(modal && event.target===modal) closeDriverProfile();
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape") closeDriverProfile();
+});
+
+const humanDriverProfileObserver=new MutationObserver(enhanceHumanDriverLinks);
+window.addEventListener("load",()=>{
+  enhanceHumanDriverLinks();
+  humanDriverProfileObserver.observe(document.body,{childList:true,subtree:true});
+});
+
+function saveAll(){
+ document.querySelectorAll("[data-d]").forEach(el=>data.drivers[el.dataset.d][el.dataset.k]=el.dataset.k==="2"?Number(el.value)||0:el.value);
+ document.querySelectorAll("[data-c]").forEach(el=>data.calendar[el.dataset.c][el.dataset.k]=el.dataset.k==="0"?Number(el.value)||0:el.value);
+ 
+ data.lastUpdated=new Date().toLocaleString("it-IT",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+ localStorage.setItem("nozzoLeague2027_2027_new_roster_v1",JSON.stringify(data));render();closeEditor()
+}
+
+function exportHtml(){
+  saveAll();
+
+  let source=document.documentElement.outerHTML;
+  const serialized=JSON.stringify(data);
+
+  // Ripristina sempre la homepage nel file pubblicato.
+  source=source.replace(
+    /<div class="home-screen hidden" id="homeScreen" style="display:\s*none;?">/,
+    '<div class="home-screen" id="homeScreen">'
+  );
+  source=source.replace(
+    /<div class="home-screen hidden" id="homeScreen">/,
+    '<div class="home-screen" id="homeScreen">'
+  );
+  source=source.replace(
+    /<div class="home-screen" id="homeScreen" style="display:\s*none;?">/,
+    '<div class="home-screen" id="homeScreen">'
+  );
+
+  // Chiude soltanto i pannelli temporanei prima dell'esportazione.
+  source=source.replace(
+    /<div class="modal open" id="modal">/,
+    '<div class="modal" id="modal">'
+  );
+  source=source.replace(
+    /<div class="history-modal open" id="historyModal"/,
+    '<div class="history-modal" id="historyModal"'
+  );
+
+  source=source.replace(/<div class="nc-modal open" id="ncModal"/, '<div class="nc-modal" id="ncModal"');
+
+  const baseStart=source.indexOf("const base=");
+  const dataStart=source.indexOf("let data =",baseStart);
+
+  if(baseStart===-1 || dataStart===-1){
+    alert("Errore durante la generazione del file HTML.");
+    return;
+  }
+
+  source=
+    source.slice(0,baseStart)+
+    "const base="+serialized+";\n"+
+    source.slice(dataStart);
+
+  const blob=new Blob(
+    ["<!doctype html>\n"+source],
+    {type:"text/html;charset=utf-8"}
+  );
+
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="index.html";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+function exportBackup(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download="NozzoLeague_backup.json";a.click()}
+function importBackup(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{data=JSON.parse(r.result);localStorage.setItem("nozzoLeague2027_2027_new_roster_v1",JSON.stringify(data));render();closeEditor()}catch{alert("Backup non valido")}};r.readAsText(f)}
+render();
+</script>
+
+
+<div class="nc-modal" id="ncModal" onclick="if(event.target===this)nozzoCloseCircuit()"><div class="nc-card" role="dialog" aria-modal="true" aria-labelledby="ncTitle"><button class="nc-close" onclick="nozzoCloseCircuit()" aria-label="Chiudi">×</button><h2 id="ncTitle"></h2><div id="ncDetails"></div></div></div>
+<div class="history-modal" id="historyModal" aria-hidden="true">
+  <div class="history-card" role="dialog" aria-modal="true" aria-labelledby="historyTitle">
+    <div class="history-head">
+      <h2 id="historyTitle">🏁 GP</h2>
+      <button class="history-x" type="button" onclick="closeHistory()" aria-label="Chiudi">×</button>
+    </div>
+    <div id="historyContent"></div>
+  </div>
+</div>
+
+
+
+
+
+<div class="driver-modal" id="driverProfileModal" aria-hidden="true">
+  <div class="driver-card" id="driverProfileCard" role="dialog" aria-modal="true" aria-labelledby="driverProfileName">
+    <div class="driver-hero" id="driverProfileHero" data-number="">
+      <button class="driver-close" type="button" onclick="closeDriverProfile()" aria-label="Chiudi">×</button>
+
+      <div class="driver-team-badge">
+        <img class="driver-team-logo" id="driverProfileTeamLogo" src="" alt="">
+        <div class="driver-team-name" id="driverProfileTeamName"></div>
+      </div>
+
+      <div class="driver-name-block">
+        <div class="driver-name-row">
+          <h2 class="driver-name" id="driverProfileName"></h2>
+          <div class="driver-number" id="driverProfileNumber"></div>
+        </div>
+        <div class="driver-sub" id="driverProfileSub"></div>
+      </div>
+    </div>
+
+    <div class="driver-stats" id="driverProfileStats"></div>
+
+    <div class="driver-recent">
+      <div class="driver-recent-title">Ultimi risultati</div>
+      <div id="driverProfileRecent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Navigazione 2027: non cambia dati, classifiche, storico o editor */
+/* Le pagine entrano da destra; tornando al menu escono verso destra. */
+let nlCurrentPage='menu';
+let nlTransitioning=false;
+function nlApplyPage(page){
+ const pages=['drivers','teams','calendar','last'];const valid=pages.includes(page);
+ document.body.classList.add('nl-navigation');document.body.classList.toggle('nl-page-open',valid);
+ document.querySelectorAll('[data-nl-page]').forEach(el=>el.classList.toggle('nl-active',valid&&el.dataset.nlPage===page));
+ const back=document.getElementById('nlBack');if(back)back.hidden=!valid;
+ nlCurrentPage=valid?page:'menu';
+ window.scrollTo({top:0,behavior:'instant'});
+}
+function nlShow(page){
+ const target=['drivers','teams','calendar','last'].includes(page)?page:'menu';
+ if(nlTransitioning || (target===nlCurrentPage && document.body.classList.contains('nl-navigation')))return;
+ const app=document.querySelector('.app');
+ if(!app || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)){
+   nlApplyPage(target);return;
+ }
+ nlTransitioning=true;
+ const back=target==='menu';
+ const old=app.cloneNode(true);
+ // Il vecchio schermo resta visibile mentre quello nuovo entra dall'altro bordo.
+ const rect=app.getBoundingClientRect();
+ old.removeAttribute('id');
+ old.setAttribute('aria-hidden','true');
+ old.classList.add('nl-transition-old',back?'nl-old-right':'nl-old-left',nlCurrentPage==='menu'?'nl-clone-menu':'nl-clone-page');
+ old.style.top=rect.top+'px';
+ // La corsa include anche lo spazio tra la pagina e il bordo del display.
+ const travelLeft=Math.ceil(rect.right+8)+'px';
+ const travelRight=Math.ceil(window.innerWidth-rect.left+8)+'px';
+ for(const node of [old,app]){node.style.setProperty('--nl-travel-left',travelLeft);node.style.setProperty('--nl-travel-right',travelRight);}
+ old.style.width=rect.width+'px';
+ old.style.height=app.offsetHeight+'px';
+ old.style.margin='0';
+ old.style.maxWidth='none';
+ document.body.appendChild(old);
+ nlApplyPage(target);
+ const enterClass=back?'nl-slide-in-left':'nl-slide-in-right';
+ app.classList.add(enterClass);
+ let finished=false;
+ function finish(){
+   if(finished)return;finished=true;
+   app.classList.remove(enterClass);
+   app.style.removeProperty('--nl-travel-left');app.style.removeProperty('--nl-travel-right');
+   old.remove();
+   nlTransitioning=false;
+ }
+ app.addEventListener('animationend',function onEnter(e){
+   if(e.target!==app)return;
+   app.removeEventListener('animationend',onEnter);
+   finish();
+ },{once:true});
+ setTimeout(finish,540);
+}
+function nlInit(){nlApplyPage('menu')}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',nlInit);else nlInit();
+</script></body></html>
