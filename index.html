@@ -610,7 +610,20 @@ body.nl-navigation.nl-page-open .header .gear{flex:0 0 auto;width:45px;height:45
 #nlGrid>article[data-nl-page="drivers"] .panel-title.nl-centered-title,
 #nlGrid>article[data-nl-page="teams"] .panel-title.nl-centered-title,
 #nlGrid>article[data-nl-page="calendar"] .panel-title.nl-centered-title{justify-content:center;text-align:center}
-#driversTable td.points,#driversTable thead th:last-child{padding-right:24px!important}
+/* Classifica Piloti: spazio reale a destra e colonne contenute nello schermo */
+#driversTable{table-layout:fixed;width:100%;max-width:100%}
+#driversTable th:first-child,#driversTable td:first-child{width:44px;padding-left:8px;padding-right:4px}
+#driversTable th:last-child,#driversTable td:last-child{width:72px;text-align:right;padding-right:26px!important;padding-left:2px}
+#driversTable th:nth-child(3),#driversTable td:nth-child(3){width:35%;overflow:hidden;text-overflow:ellipsis}
+#driversTable th:nth-child(2),#driversTable td:nth-child(2){overflow:hidden;text-overflow:ellipsis}
+@media(max-width:480px){
+  #driversTable th,#driversTable td{padding-top:10px;padding-bottom:10px;padding-left:5px;padding-right:5px;font-size:12px}
+  #driversTable th:first-child,#driversTable td:first-child{width:38px;padding-left:6px;padding-right:3px}
+  #driversTable th:last-child,#driversTable td:last-child{width:65px;padding-right:23px!important;padding-left:0}
+  #driversTable th:nth-child(3),#driversTable td:nth-child(3){width:33%}
+  #driversTable .team{max-width:100%;overflow:hidden;white-space:nowrap}
+  #driversTable .team-logo{flex-shrink:0}
+}
 .nl-team-link{cursor:pointer;touch-action:manipulation}
 .nl-team-link:hover b{text-decoration:underline;text-decoration-color:var(--red)}
 .nl-team-modal{display:none;position:fixed;inset:0;z-index:13000;background:rgba(0,0,0,.88);padding:calc(env(safe-area-inset-top,0px) + 10px) 8px calc(env(safe-area-inset-bottom,0px) + 10px);align-items:flex-start;justify-content:center;overflow-y:auto}
