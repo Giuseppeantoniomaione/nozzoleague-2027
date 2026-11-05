@@ -902,7 +902,7 @@ body.nl-navigation .home-screen{z-index:9999!important}
 <div id="nl-fixed-tunnel" aria-hidden="true"></div>
 <div id="nlPageFade" aria-hidden="true"></div>
 
-<div class="home-screen hidden" id="homeScreen" style="display: none; will-change: auto;">
+<div class="home-screen" id="homeScreen">
   <div class="home-bg-blur"></div>
   <div class="home-poster"><button class="enter-league" onclick="enterLeague()" aria-label="Entra nella lega"><span class="nz-arrow" aria-hidden="true">❯❯</span><span class="nz-cta-label">ENTRA NELLA LEGA</span><span class="nz-arrow" aria-hidden="true">❯❯</span></button></div>
 </div>
@@ -2029,6 +2029,7 @@ function exportHtml(){
   const serialized=JSON.stringify(data);
 
   // Ripristina sempre la homepage nel file pubblicato.
+  source=source.replace(/<div\s+class="home-screen(?: hidden)?"\s+id="homeScreen"(?:\s+style="[^"]*")?\s*>/, '<div class="home-screen" id="homeScreen">');
   source=source.replace(
     /<div class="home-screen hidden" id="homeScreen" style="display:\s*none;?">/,
     '<div class="home-screen" id="homeScreen">'
