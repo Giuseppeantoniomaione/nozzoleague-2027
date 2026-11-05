@@ -645,12 +645,25 @@ body.nl-navigation.nl-page-open .header .gear{flex:0 0 auto;width:45px;height:45
 .nl-team-bar{width:25px;min-height:2px;background:var(--driver-accent);border-radius:5px 5px 0 0}
 .nl-team-chart-empty{padding:22px;text-align:center;color:#a9adb0;font-size:12px}
 @media(max-width:390px){.nl-team-hero{height:clamp(235px,40dvh,315px)}}
+
+/* Schede team 2027: impaginazione coerente con l'anteprima mobile approvata. */
+.nl-team-card{background:linear-gradient(180deg,#080d0e,#0a0c0e 70%);box-shadow:0 0 18px color-mix(in srgb,var(--driver-accent) 18%,transparent),0 28px 80px #000c}
+.nl-team-hero{height:clamp(310px,45dvh,390px);background:radial-gradient(ellipse 70% 47% at 50% 63%,color-mix(in srgb,var(--driver-accent) 26%,#06090a),#06090a 80%)}
+.nl-team-identity{position:absolute;top:16px;bottom:auto;left:16px;right:16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;text-align:center;padding-right:42px;padding-left:42px;z-index:2;pointer-events:none}
+.nl-team-logo{width:min(170px,62%);height:48px;max-height:48px;object-fit:contain;object-position:center;flex:none;filter:drop-shadow(0 1px 3px #000)}
+.nl-team-name{font:italic 900 clamp(22px,5.7vw,29px)/1.08 Arial Black,Arial,sans-serif;color:#fff;letter-spacing:.8px;text-shadow:0 2px 9px #000;white-space:normal;overflow-wrap:normal}
+.nl-team-subtitle{font:500 10px/1.2 Arial,sans-serif;letter-spacing:3px;color:#e1e4e5;margin-top:4px}
+.nl-team-car{left:0;top:auto;bottom:0;width:100%;height:65%;object-fit:cover;object-position:center 67%;filter:contrast(1.09) saturate(1.1);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 13%,#000 78%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0%,#000 13%,#000 78%,transparent 100%)}
+.nl-team-close{position:sticky;top:10px;right:10px;z-index:20;width:48px;height:48px}
+.nl-team-drivers{padding:8px 14px 18px;font-size:13px;color:#d5d7d9}
+@media(max-width:390px){.nl-team-hero{height:330px}.nl-team-identity{top:15px}.nl-team-car{height:65%}}
+
 </style>
 
-<link rel="manifest" href="manifest.json?v=20261105-frontali-updated">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=20261105-frontali-updated">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png?v=20261105-frontali-updated">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=20261105-frontali-updated">
+<link rel="manifest" href="manifest.json?v=20261105-team-layout-v2">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=20261105-team-layout-v2">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png?v=20261105-team-layout-v2">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=20261105-team-layout-v2">
 <meta name="theme-color" content="#050606">
 <meta name="application-name" content="NozzoLeague">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2121,7 +2134,7 @@ render();
 <div class="nl-team-modal" id="nlTeamModal" aria-hidden="true">
  <div class="nl-team-card" id="nlTeamCard" role="dialog" aria-modal="true" aria-labelledby="nlTeamName">
   <button class="nl-team-close" type="button" onclick="nlCloseTeam()" aria-label="Chiudi">×</button>
-  <div class="nl-team-hero"><img class="nl-team-car" id="nlTeamCar" alt=""><div class="nl-team-identity"><img class="nl-team-logo" id="nlTeamLogo" alt=""><div class="nl-team-name" id="nlTeamName"></div></div></div>
+  <div class="nl-team-hero"><img class="nl-team-car" id="nlTeamCar" alt=""><div class="nl-team-identity"><img class="nl-team-logo" id="nlTeamLogo" alt=""><div class="nl-team-name" id="nlTeamName"></div><div class="nl-team-subtitle" id="nlTeamSubtitle">FORMULA ONE TEAM</div></div></div>
   <div class="nl-team-drivers" id="nlTeamDrivers"></div>
   <div class="driver-stats" id="nlTeamStats"></div>
   <div class="nl-team-chart-wrap"><div class="nl-team-chart-title">Rendimento · Tutti i GP disputati</div><div class="nl-team-chart-scroll" id="nlTeamChart"></div></div>
@@ -2141,9 +2154,9 @@ function nlOpenTeam(team){
  const modal=document.getElementById('nlTeamModal'),card=document.getElementById('nlTeamCard');
  if(!modal||!card)return;
  card.style.setProperty('--driver-accent',config[1]);
- document.getElementById('nlTeamName').textContent=team.toUpperCase();
+ document.getElementById('nlTeamName').textContent=({'Haas F1 Team':'HAAS','Red Bull Racing':'RED BULL RACING','Mercedes':'MERCEDES AMG PETRONAS','Audi':'AUDI F1 TEAM','McLaren':'McLAREN','Racing Bulls':'RACING BULLS','Aston Martin':'ASTON MARTIN','Williams':'WILLIAMS RACING','Alpine':'ALPINE','Ferrari':'FERRARI','Cadillac':'CADILLAC'}[team]||team.toUpperCase());
  const car=document.getElementById('nlTeamCar');car.src='assets/cars/'+config[0]+'-front.webp';car.alt='Vista frontale monoposto '+team;
- const logo=document.getElementById('nlTeamLogo');logo.onerror=()=>{logo.onerror=null;logo.src=nlTeamLogo(team)};logo.src=nlOfficialLogo(team);logo.style.filter=(team==='Audi'||team==='Haas F1 Team')?'brightness(0) invert(1)':'drop-shadow(0 1px 3px #000)';logo.alt='Logo '+team;
+ const logo=document.getElementById('nlTeamLogo');logo.onerror=()=>{logo.style.display='none'};logo.style.display='block';logo.src=nlOfficialLogo(team);logo.style.filter=(team==='Audi'||team==='Haas F1 Team')?'brightness(0) invert(1)':'drop-shadow(0 1px 3px #000)';logo.alt='Logo '+team;
  const pilots=(data.drivers||[]).filter(d=>d[1]===team).map(d=>d[0]);
  document.getElementById('nlTeamDrivers').textContent=pilots.join(' · ');
  const all=(data.raceHistory||[]).slice().sort((a,b)=>Number(a.round)-Number(b.round));
