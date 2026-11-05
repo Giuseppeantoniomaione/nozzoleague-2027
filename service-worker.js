@@ -1,5 +1,5 @@
 /* NozzoLeague 2027: online-first. Non memorizza né modifica i risultati. */
-const VERSION = '20261104-new-repository-2027-v1';
+const VERSION = '20261104-11-cars-png-v2';
 const CACHE = 'nozzoleague-static-' + VERSION;
 const CORE = ['./', './index.html', './manifest.json'];
 self.addEventListener('install', event => {
