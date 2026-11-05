@@ -629,8 +629,8 @@ body.nl-navigation.nl-page-open .header .gear{flex:0 0 auto;width:45px;height:45
 .nl-team-modal{display:none;position:fixed;inset:0;z-index:13000;background:rgba(0,0,0,.88);padding:calc(env(safe-area-inset-top,0px) + 10px) 8px calc(env(safe-area-inset-bottom,0px) + 10px);align-items:flex-start;justify-content:center;overflow-y:auto}
 .nl-team-modal.open{display:flex}
 .nl-team-card{--driver-accent:#ed1118;width:min(440px,100%);max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 20px);overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--driver-accent);border-radius:22px;background:linear-gradient(180deg,#121415,#090a0b 48%,#0d0f10);box-shadow:0 28px 80px #000b}
-.nl-team-hero{position:relative;height:clamp(250px,43dvh,360px);overflow:hidden;background:linear-gradient(180deg,#121415,#090a0b 95%)}
-.nl-team-car{position:absolute;inset:30px 6px 60px;width:calc(100% - 12px);height:calc(100% - 90px);object-fit:contain;filter:drop-shadow(0 16px 11px #000c) drop-shadow(0 2px 2px #0008)}
+.nl-team-hero{position:relative;height:clamp(235px,40dvh,330px);overflow:hidden;background:radial-gradient(ellipse at 50% 46%,color-mix(in srgb,var(--driver-accent) 18%,#0b0d0f),#0b0d0f 78%)}
+.nl-team-car{position:absolute;left:0;top:48px;width:100%;height:calc(100% - 72px);object-fit:cover;object-position:center center;opacity:1;filter:contrast(1.07) saturate(1.13);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 9%,black 72%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0%,black 9%,black 72%,transparent 100%)}
 .nl-team-close{position:sticky;float:right;top:10px;right:10px;z-index:10;margin:10px 10px -58px 0;width:46px;height:46px;border:1px solid #ffffff55;border-radius:50%;background:#090b0de8;color:white;font-size:29px;cursor:pointer;touch-action:manipulation}
 .nl-team-identity{position:absolute;bottom:15px;left:18px;right:18px;display:flex;align-items:center;gap:13px}
 .nl-team-logo{width:72px;height:56px;object-fit:contain;flex:none}
@@ -647,10 +647,10 @@ body.nl-navigation.nl-page-open .header .gear{flex:0 0 auto;width:45px;height:45
 @media(max-width:390px){.nl-team-hero{height:clamp(235px,40dvh,315px)}}
 </style>
 
-<link rel="manifest" href="manifest.json?v=20261104-approved-home">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=20261104-approved-home">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png?v=20261104-approved-home">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=20261104-approved-home">
+<link rel="manifest" href="manifest.json?v=20261105-frontali-updated">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=20261105-frontali-updated">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png?v=20261105-frontali-updated">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=20261105-frontali-updated">
 <meta name="theme-color" content="#050606">
 <meta name="application-name" content="NozzoLeague">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2142,8 +2142,8 @@ function nlOpenTeam(team){
  if(!modal||!card)return;
  card.style.setProperty('--driver-accent',config[1]);
  document.getElementById('nlTeamName').textContent=team.toUpperCase();
- const car=document.getElementById('nlTeamCar');car.src='assets/cars/'+config[0]+'.png';car.alt='Render fotorealistico monoposto '+team;
- const logo=document.getElementById('nlTeamLogo');logo.onerror=()=>{logo.onerror=null;logo.src=nlTeamLogo(team)};logo.src=nlOfficialLogo(team);logo.alt='Logo '+team;
+ const car=document.getElementById('nlTeamCar');car.src='assets/cars/'+config[0]+'-front.webp';car.alt='Vista frontale monoposto '+team;
+ const logo=document.getElementById('nlTeamLogo');logo.onerror=()=>{logo.onerror=null;logo.src=nlTeamLogo(team)};logo.src=nlOfficialLogo(team);logo.style.filter=(team==='Audi'||team==='Haas F1 Team')?'brightness(0) invert(1)':'drop-shadow(0 1px 3px #000)';logo.alt='Logo '+team;
  const pilots=(data.drivers||[]).filter(d=>d[1]===team).map(d=>d[0]);
  document.getElementById('nlTeamDrivers').textContent=pilots.join(' · ');
  const all=(data.raceHistory||[]).slice().sort((a,b)=>Number(a.round)-Number(b.round));
