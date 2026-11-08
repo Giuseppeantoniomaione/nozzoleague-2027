@@ -658,6 +658,12 @@ body.nl-navigation.nl-page-open .header .gear{flex:0 0 auto;width:45px;height:45
 .nl-team-drivers{padding:8px 14px 18px;font-size:13px;color:#d5d7d9}
 @media(max-width:390px){.nl-team-hero{height:330px}.nl-team-identity{top:15px}.nl-team-car{height:65%}}
 
+
+/* Schede 11 scuderie: poster individuali, loghi e scritte gia incorporati nell’immagine. */
+.nl-team-hero{height:clamp(325px,45dvh,410px)!important;background:#050608!important}
+.nl-team-hero .nl-team-identity{display:none!important}
+.nl-team-hero .nl-team-car{position:absolute!important;left:0!important;top:0!important;bottom:auto!important;width:100%!important;height:auto!important;max-width:none!important;object-fit:contain!important;object-position:top center!important;opacity:1!important;filter:none!important;-webkit-mask-image:none!important;mask-image:none!important}
+@media(max-width:390px){.nl-team-hero{height:clamp(315px,44dvh,370px)!important}}
 </style>
 
 <link rel="manifest" href="manifest.json?v=20261105-team-layout-v2">
@@ -2156,7 +2162,7 @@ function nlOpenTeam(team){
  if(!modal||!card)return;
  card.style.setProperty('--driver-accent',config[1]);
  document.getElementById('nlTeamName').textContent=({'Haas F1 Team':'HAAS','Red Bull Racing':'RED BULL RACING','Mercedes':'MERCEDES AMG PETRONAS','Audi':'AUDI F1 TEAM','McLaren':'McLAREN','Racing Bulls':'RACING BULLS','Aston Martin':'ASTON MARTIN','Williams':'WILLIAMS RACING','Alpine':'ALPINE','Ferrari':'FERRARI','Cadillac':'CADILLAC'}[team]||team.toUpperCase());
- const car=document.getElementById('nlTeamCar');car.src='assets/cars/'+config[0]+'-front.webp';car.alt='Vista frontale monoposto '+team;
+ const car=document.getElementById('nlTeamCar');car.src='assets/cars/'+config[0]+'-front.png';car.alt='Vista frontale monoposto '+team;
  const logo=document.getElementById('nlTeamLogo');logo.onerror=()=>{logo.style.display='none'};logo.style.display='block';logo.src=nlOfficialLogo(team);logo.style.filter=(team==='Audi'||team==='Haas F1 Team')?'brightness(0) invert(1)':'drop-shadow(0 1px 3px #000)';logo.alt='Logo '+team;
  const pilots=(data.drivers||[]).filter(d=>d[1]===team).map(d=>d[0]);
  document.getElementById('nlTeamDrivers').textContent=pilots.join(' · ');
